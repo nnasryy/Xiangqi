@@ -4,6 +4,8 @@
  */
 package xiangqi;
 
+import GUI.MenuScreens;
+
 /**
  *
  * @author nasry
@@ -14,7 +16,7 @@ public class Xiangqi {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        new MenuScreens();
     }
-    
+
 }
