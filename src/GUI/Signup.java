@@ -1,19 +1,31 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package GUI;
 
 import java.awt.Color;
 import java.awt.Font;
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
-public class Login {
-
+/**
+ *
+ * @author nasry
+ */
+public class Signup {
     JFrame frame;
     JPasswordField passField;
     JTextField userField;
-
-    public Login() {
-
-        frame = new JFrame("Login");
+    
+    public Signup(){
+    
+      frame = new JFrame("Signup");
         frame.setSize(600, 530);
         frame.setLayout(null);
         frame.setLocationRelativeTo(null);
@@ -42,9 +54,9 @@ public class Login {
         // =========================
         // TITULO
         // =========================
-        JLabel title = new JLabel("LOG IN");
+        JLabel title = new JLabel("SIGN UP");
         title.setBounds(130, 50, 200, 60);
-        title.setFont(new Font("Calisto MT", Font.BOLD, 48));
+        title.setFont(new Font("Calisto MT", Font.BOLD, 46));
         title.setForeground(Color.BLACK);
         panel.add(title);
 
@@ -81,7 +93,7 @@ public class Login {
         // =========================
         // BOTON LOGIN
         // =========================
-        JButton loginBtn = new JButton("LOG IN");
+        JButton loginBtn = new JButton("SIGN UP");
         loginBtn.setBounds(130, 310, 160, 70);
         loginBtn.setBackground(new Color(255, 228, 161));
         loginBtn.setFont(new Font("Century", Font.BOLD, 24));
@@ -106,12 +118,9 @@ public class Login {
                 new MenuScreens();
                         });
 
-        loginBtn.addActionListener(e -> {
-            String user = userField.getText();
-            String pass = new String(passField.getPassword());
-
-        });
-
-        frame.setVisible(true);
+    frame.setVisible(true);
+    
     }
+    
+   
 }

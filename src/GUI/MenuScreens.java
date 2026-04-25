@@ -39,8 +39,11 @@ public class MenuScreens {
         btnSignUp.setContentAreaFilled(false);
         btnSignUp.setFocusPainted(false);
         efectoHover(btnSignUp, "src/images/signup.png", "src/images/hoverloginbtn.png");
-        btnSignUp.addActionListener(e -> System.out.println("Ir a SIGN UP"));
-        bg.add(btnSignUp); 
+        btnSignUp.addActionListener(e -> {
+            frame.dispose();
+            new Login();
+        });
+        bg.add(btnSignUp);
 
         // =========================
         // BOTON LOGIN
@@ -51,7 +54,11 @@ public class MenuScreens {
         btnLogin.setContentAreaFilled(false);
         btnLogin.setFocusPainted(false);
         efectoHover(btnLogin, "src/images/login.png", "src/images/hoversignupbtn.png");
-        btnLogin.addActionListener(e -> System.out.println("Ir a LOGIN"));
+        btnLogin.addActionListener(e -> {
+            frame.dispose();
+            new Signup();
+        });
+
         bg.add(btnLogin);
 
         // =========================
@@ -73,13 +80,18 @@ public class MenuScreens {
     // =========================
     private void efectoHover(JButton btn, String normalPath, String hoverPath) {
         ImageIcon normal = new ImageIcon(normalPath);
-        ImageIcon hover  = new ImageIcon(hoverPath);
+        ImageIcon hover = new ImageIcon(hoverPath);
         btn.setIcon(normal);
         btn.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseEntered(MouseEvent e) { btn.setIcon(hover);  }
+            public void mouseEntered(MouseEvent e) {
+                btn.setIcon(hover);
+            }
+
             @Override
-            public void mouseExited(MouseEvent e)  { btn.setIcon(normal); }
+            public void mouseExited(MouseEvent e) {
+                btn.setIcon(normal);
+            }
         });
     }
 }
