@@ -34,11 +34,11 @@ public class MenuScreens {
         // BOTON SIGN UP
         // =========================
         JButton btnSignUp = new JButton();
-        btnSignUp.setBounds(120, 240, 170, 160);
+        btnSignUp.setBounds(120, 242, 170, 160);
         btnSignUp.setBorderPainted(false);
         btnSignUp.setContentAreaFilled(false);
         btnSignUp.setFocusPainted(false);
-        efectoHover(btnSignUp, "src/images/signup.png", "src/images/hoversignup.png");
+        efectoHover(btnSignUp, "src/images/signup.png", "src/images/hoverloginbtn.png");
         btnSignUp.addActionListener(e -> System.out.println("Ir a SIGN UP"));
         bg.add(btnSignUp); 
 
@@ -46,11 +46,11 @@ public class MenuScreens {
         // BOTON LOGIN
         // =========================
         JButton btnLogin = new JButton();
-        btnLogin.setBounds(310, 240, 170, 160);
+        btnLogin.setBounds(310, 242, 170, 160);
         btnLogin.setBorderPainted(false);
         btnLogin.setContentAreaFilled(false);
         btnLogin.setFocusPainted(false);
-        efectoHover(btnLogin, "src/images/login.png", "src/images/hoverlogin.png");
+        efectoHover(btnLogin, "src/images/login.png", "src/images/hoversignupbtn.png");
         btnLogin.addActionListener(e -> System.out.println("Ir a LOGIN"));
         bg.add(btnLogin);
 
@@ -62,7 +62,6 @@ public class MenuScreens {
         btnSalir.setBorderPainted(false);
         btnSalir.setContentAreaFilled(false);
         btnSalir.setFocusPainted(false);
-        efectoHover(btnSalir, "src/images/SALIR.png", "src/images/hoverSALIR.png");
         btnSalir.addActionListener(e -> System.exit(0));
         bg.add(btnSalir);
 
