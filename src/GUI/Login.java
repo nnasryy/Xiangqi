@@ -1,5 +1,7 @@
 package GUI;
 
+import Users.Usuario;
+import almacenamiento.Sistema;
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.*;
@@ -10,9 +12,10 @@ public class Login {
     JFrame frame;
     JPasswordField passField;
     JTextField userField;
+    private Sistema sistema;
 
-    public Login() {
-
+    public Login(Sistema sistema) {
+        this.sistema = sistema;
         frame = new JFrame("Login");
         frame.setSize(600, 530);
         frame.setLayout(null);
@@ -87,7 +90,23 @@ public class Login {
         loginBtn.setFont(new Font("Century", Font.BOLD, 24));
         loginBtn.setBorder(new LineBorder(Color.BLACK, 3));
         panel.add(loginBtn);
+        loginBtn.addActionListener(e -> {
 
+            String user = userField.getText();
+            String pass = new String(passField.getPassword());
+
+            Usuario u = sistema.login(user, pass);
+
+            if (u != null) {
+                JOptionPane.showMessageDialog(null, "Bienvenido " + user);
+
+                frame.dispose();
+                new MenuPrincipal(sistema, u);
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
+            }
+        });
         // =========================
         // BOTON SALIR
         // =========================
@@ -102,9 +121,9 @@ public class Login {
         // ACCIONES
         // =========================
         exitBtn.addActionListener(e -> {
-                frame.dispose();
-                new MenuScreens();
-                        });
+            frame.dispose();
+            new MenuScreens(sistema);
+        });
 
         loginBtn.addActionListener(e -> {
             String user = userField.getText();

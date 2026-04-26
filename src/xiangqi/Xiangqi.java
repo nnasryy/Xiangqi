@@ -5,18 +5,19 @@
 package xiangqi;
 
 import GUI.MenuScreens;
+import almacenamiento.Sistema;
 
 /**
  *
  * @author nasry
  */
 public class Xiangqi {
-
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        new MenuScreens();
+        Sistema sistema = new Sistema();
+        new MenuScreens(sistema);
     }
 
 }

@@ -1,5 +1,6 @@
 package GUI;
 
+import almacenamiento.Sistema;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
@@ -14,8 +15,10 @@ import javax.swing.JLabel;
 public class MenuScreens {
 
     private JFrame frame;
+    private Sistema sistema;
 
-    public MenuScreens() {
+    public MenuScreens(Sistema sistema) {
+        this.sistema = sistema;
         frame = new JFrame("Main Menu");
         frame.setSize(600, 530);
         frame.setLayout(null);
@@ -41,7 +44,7 @@ public class MenuScreens {
         efectoHover(btnSignUp, "src/images/signup.png", "src/images/hoverloginbtn.png");
         btnSignUp.addActionListener(e -> {
             frame.dispose();
-            new Login();
+            new Login(sistema);
         });
         bg.add(btnSignUp);
 
@@ -56,7 +59,7 @@ public class MenuScreens {
         efectoHover(btnLogin, "src/images/login.png", "src/images/hoversignupbtn.png");
         btnLogin.addActionListener(e -> {
             frame.dispose();
-            new Signup();
+            new Signup(sistema);
         });
 
         bg.add(btnLogin);
