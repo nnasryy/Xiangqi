@@ -42,19 +42,26 @@ public class Signup {
 
         // TITULO
         JLabel title = new JLabel("SIGN UP");
-        title.setBounds(130, 50, 200, 60);
+        title.setBounds(120, 20, 260, 60);
         title.setFont(new Font("Calisto MT", Font.BOLD, 46));
         title.setForeground(Color.BLACK);
         panel.add(title);
 
+        // HINT password
+        JLabel hint = new JLabel("* El password debe tener exactamente 5 caracteres");
+        hint.setBounds(80, 75, 370, 20);
+        hint.setFont(new Font("Calisto MT", Font.ITALIC, 15));
+        hint.setForeground(new Color(100, 0, 0));
+        panel.add(hint);
+
         // USERNAME
         JLabel userLbl = new JLabel("USERNAME:");
-        userLbl.setBounds(90, 130, 240, 40);
+        userLbl.setBounds(90, 110, 240, 40);
         userLbl.setFont(new Font("Calisto MT", Font.BOLD, 30));
         panel.add(userLbl);
 
         userField = new JTextField();
-        userField.setBounds(90, 170, 270, 40);
+        userField.setBounds(90, 150, 270, 40);
         userField.setBackground(new Color(255, 215, 114));
         userField.setFont(new Font("Century", Font.PLAIN, 20));
         userField.setBorder(new LineBorder(Color.BLACK, 2));
@@ -62,20 +69,38 @@ public class Signup {
 
         // PASSWORD
         JLabel passLbl = new JLabel("PASSWORD:");
-        passLbl.setBounds(90, 220, 240, 40);
+        passLbl.setBounds(90, 200, 240, 40);
         passLbl.setFont(new Font("Calisto MT", Font.BOLD, 30));
         panel.add(passLbl);
 
         passField = new JPasswordField();
-        passField.setBounds(90, 260, 270, 40);
+        passField.setBounds(90, 240, 270, 40);
         passField.setBackground(new Color(255, 215, 114));
         passField.setFont(new Font("Century", Font.PLAIN, 20));
         passField.setBorder(new LineBorder(Color.BLACK, 2));
         panel.add(passField);
 
+        // Contador de caracteres
+        JLabel contador = new JLabel("0/5");
+        contador.setBounds(370, 240, 50, 40);
+        contador.setFont(new Font("Arial", Font.BOLD, 14));
+        contador.setForeground(Color.RED);
+        panel.add(contador);
+
+        passField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            private void actualizar() {
+                int len = passField.getPassword().length;
+                contador.setText(len + "/5");
+                contador.setForeground(len == 5 ? new Color(0, 120, 0) : Color.RED);
+            }
+            public void insertUpdate (javax.swing.event.DocumentEvent e) { actualizar(); }
+            public void removeUpdate (javax.swing.event.DocumentEvent e) { actualizar(); }
+            public void changedUpdate(javax.swing.event.DocumentEvent e) { actualizar(); }
+        });
+
         // BOTON SIGN UP
         JButton signupBtn = new JButton("SIGN UP");
-        signupBtn.setBounds(130, 310, 160, 70);
+        signupBtn.setBounds(130, 300, 160, 70);
         signupBtn.setBackground(new Color(255, 228, 161));
         signupBtn.setFont(new Font("Century", Font.BOLD, 24));
         signupBtn.setBorder(new LineBorder(Color.BLACK, 3));
@@ -94,21 +119,28 @@ public class Signup {
         // =========================
         signupBtn.addActionListener(e -> {
             String user = userField.getText().trim();
-            String pass = new String(passField.getPassword()).trim();
+            String pass = new String(passField.getPassword());
 
-            if (user.isEmpty() || pass.isEmpty()) {
-                JOptionPane.showMessageDialog(frame, "Completa todos los campos.");
+            if (user.isEmpty()) {
+                JOptionPane.showMessageDialog(frame, "El username no puede estar vacío.");
+                return;
+            }
+            if (pass.length() != 5) {
+                JOptionPane.showMessageDialog(frame, "El password debe tener exactamente 5 caracteres.");
+                return;
+            }
+            if (sistema.usernameExiste(user)) {
+                JOptionPane.showMessageDialog(frame, "Ese username ya existe, elige otro.");
                 return;
             }
 
             boolean ok = sistema.registrar(user, pass);
-
             if (ok) {
-                JOptionPane.showMessageDialog(frame, "Cuenta creada. ¡Bienvenido " + user + "!");
+                JOptionPane.showMessageDialog(frame, "¡Cuenta creada! Bienvenido " + user);
                 frame.dispose();
                 new MenuPrincipal(sistema, sistema.login(user, pass));
             } else {
-                JOptionPane.showMessageDialog(frame, "El usuario ya existe o datos inválidos.");
+                JOptionPane.showMessageDialog(frame, "Error al crear la cuenta. Intenta de nuevo.");
             }
         });
 

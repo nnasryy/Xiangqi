@@ -7,6 +7,9 @@ import java.awt.Font;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
+/**
+ * @author nasry
+ */
 public class Login {
 
     JFrame frame;
@@ -23,18 +26,14 @@ public class Login {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
 
-        // =========================
         // FONDO
-        // =========================
         JPanel bg = new JPanel();
         bg.setLayout(null);
         bg.setBackground(new Color(218, 100, 0));
         bg.setBounds(0, 0, 600, 500);
         frame.add(bg);
 
-        // =========================
         // PANEL PRINCIPAL
-        // =========================
         JPanel panel = new JPanel();
         panel.setLayout(null);
         panel.setBackground(new Color(255, 184, 50));
@@ -42,18 +41,14 @@ public class Login {
         panel.setBounds(80, 30, 440, 440);
         bg.add(panel);
 
-        // =========================
         // TITULO
-        // =========================
         JLabel title = new JLabel("LOG IN");
         title.setBounds(130, 50, 200, 60);
         title.setFont(new Font("Calisto MT", Font.BOLD, 48));
         title.setForeground(Color.BLACK);
         panel.add(title);
 
-        // =========================
         // USERNAME
-        // =========================
         JLabel userLbl = new JLabel("USERNAME:");
         userLbl.setBounds(90, 130, 240, 40);
         userLbl.setFont(new Font("Calisto MT", Font.BOLD, 30));
@@ -66,9 +61,7 @@ public class Login {
         userField.setBorder(new LineBorder(Color.BLACK, 2));
         panel.add(userField);
 
-        // =========================
         // PASSWORD
-        // =========================
         JLabel passLbl = new JLabel("PASSWORD:");
         passLbl.setBounds(90, 220, 240, 40);
         passLbl.setFont(new Font("Calisto MT", Font.BOLD, 30));
@@ -81,35 +74,15 @@ public class Login {
         passField.setBorder(new LineBorder(Color.BLACK, 2));
         panel.add(passField);
 
-        // =========================
         // BOTON LOGIN
-        // =========================
         JButton loginBtn = new JButton("LOG IN");
         loginBtn.setBounds(130, 310, 160, 70);
         loginBtn.setBackground(new Color(255, 228, 161));
         loginBtn.setFont(new Font("Century", Font.BOLD, 24));
         loginBtn.setBorder(new LineBorder(Color.BLACK, 3));
         panel.add(loginBtn);
-        loginBtn.addActionListener(e -> {
 
-            String user = userField.getText();
-            String pass = new String(passField.getPassword());
-
-            Usuario u = sistema.login(user, pass);
-
-            if (u != null) {
-                JOptionPane.showMessageDialog(null, "Bienvenido " + user);
-
-                frame.dispose();
-                new MenuPrincipal(sistema, u);
-
-            } else {
-                JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
-            }
-        });
-        // =========================
         // BOTON SALIR
-        // =========================
         JButton exitBtn = new JButton("SALIR");
         exitBtn.setBounds(20, 390, 90, 40);
         exitBtn.setBackground(new Color(153, 0, 0));
@@ -120,15 +93,29 @@ public class Login {
         // =========================
         // ACCIONES
         // =========================
+        loginBtn.addActionListener(e -> {
+            String user = userField.getText().trim();
+            String pass = new String(passField.getPassword());
+
+            if (user.isEmpty() || pass.isEmpty()) {
+                JOptionPane.showMessageDialog(frame, "Completa todos los campos.");
+                return;
+            }
+
+            Usuario u = sistema.login(user, pass);
+
+            if (u != null) {
+                JOptionPane.showMessageDialog(frame, "¡Bienvenido " + user + "!");
+                frame.dispose();
+                new MenuPrincipal(sistema, u);
+            } else {
+                JOptionPane.showMessageDialog(frame, "Usuario o contraseña incorrectos.");
+            }
+        });
+
         exitBtn.addActionListener(e -> {
             frame.dispose();
             new MenuScreens(sistema);
-        });
-
-        loginBtn.addActionListener(e -> {
-            String user = userField.getText();
-            String pass = new String(passField.getPassword());
-
         });
 
         frame.setVisible(true);
