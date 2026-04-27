@@ -68,7 +68,7 @@ public class JuegoXiangqi extends JFrame {
         panel.add(sep1);
 
         // Jugador 1 (ROJO)
-        JLabel lblJ1 = new JLabel("🔴 " + jugador1.getUsername(), SwingConstants.CENTER);
+        JLabel lblJ1 = new JLabel("- " + jugador1.getUsername(), SwingConstants.CENTER);
         lblJ1.setBounds(0, 80, 200, 30);
         lblJ1.setFont(new Font("Arial", Font.BOLD, 14));
         lblJ1.setForeground(new Color(220, 80, 80));
@@ -87,7 +87,7 @@ public class JuegoXiangqi extends JFrame {
         panel.add(vs);
 
         // Jugador 2 (NEGRO)
-        JLabel lblJ2 = new JLabel("⚫ " + jugador2.getUsername(), SwingConstants.CENTER);
+        JLabel lblJ2 = new JLabel("- " + jugador2.getUsername(), SwingConstants.CENTER);
         lblJ2.setBounds(0, 170, 200, 30);
         lblJ2.setFont(new Font("Arial", Font.BOLD, 14));
         lblJ2.setForeground(new Color(180, 180, 180));

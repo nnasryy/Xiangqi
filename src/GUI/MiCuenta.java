@@ -11,8 +11,7 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 
 /**
- * Pantalla Mi Cuenta — muestra info del usuario loggeado.
- * Opciones: Cambiar Password, Eliminar Cuenta.
+ * 
  * @author nasry
  */
 public class MiCuenta extends JFrame {
