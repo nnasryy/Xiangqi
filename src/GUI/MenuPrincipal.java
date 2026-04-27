@@ -90,8 +90,8 @@ public class MenuPrincipal {
         efectoHover(salir, "src/images/salirmenup.png", "src/images/salirmenup.png");
         salir.addActionListener(e -> {
             frame.dispose();
-            // new Login();
-        });
+      new MenuScreens(sistema);
+              });
         bg.add(salir);
 frame.setVisible(true);
     }

@@ -10,11 +10,11 @@ import javax.swing.border.LineBorder;
 /**
  * @author nasry
  */
-public class Login {
+public class Login extends JFrame {
 
-    JFrame frame;
+    JFrame        frame;
     JPasswordField passField;
-    JTextField userField;
+    JTextField    userField;
     private Sistema sistema;
 
     public Login(Sistema sistema) {
@@ -27,23 +27,21 @@ public class Login {
         frame.setResizable(false);
 
         // FONDO
-        JPanel bg = new JPanel();
-        bg.setLayout(null);
+        JPanel bg = new JPanel(null);
         bg.setBackground(new Color(218, 100, 0));
         bg.setBounds(0, 0, 600, 500);
         frame.add(bg);
 
         // PANEL PRINCIPAL
-        JPanel panel = new JPanel();
-        panel.setLayout(null);
+        JPanel panel = new JPanel(null);
         panel.setBackground(new Color(255, 184, 50));
         panel.setBorder(new LineBorder(Color.BLACK, 3));
         panel.setBounds(80, 30, 440, 440);
         bg.add(panel);
 
         // TITULO
-        JLabel title = new JLabel("LOG IN");
-        title.setBounds(130, 50, 200, 60);
+        JLabel title = new JLabel("LOG IN", SwingConstants.CENTER);
+        title.setBounds(0, 50, 440, 60);
         title.setFont(new Font("Calisto MT", Font.BOLD, 48));
         title.setForeground(Color.BLACK);
         panel.add(title);
@@ -76,40 +74,40 @@ public class Login {
 
         // BOTON LOGIN
         JButton loginBtn = new JButton("LOG IN");
-        loginBtn.setBounds(130, 310, 160, 70);
+        loginBtn.setBounds(130, 320, 160, 60);
         loginBtn.setBackground(new Color(255, 228, 161));
         loginBtn.setFont(new Font("Century", Font.BOLD, 24));
         loginBtn.setBorder(new LineBorder(Color.BLACK, 3));
+        loginBtn.setFocusPainted(false);
         panel.add(loginBtn);
 
         // BOTON SALIR
         JButton exitBtn = new JButton("SALIR");
         exitBtn.setBounds(20, 390, 90, 40);
         exitBtn.setBackground(new Color(153, 0, 0));
+        exitBtn.setForeground(Color.WHITE);
         exitBtn.setFont(new Font("Century", Font.PLAIN, 18));
         exitBtn.setBorder(new LineBorder(Color.BLACK, 3));
+        exitBtn.setFocusPainted(false);
         panel.add(exitBtn);
 
-        // =========================
         // ACCIONES
-        // =========================
         loginBtn.addActionListener(e -> {
             String user = userField.getText().trim();
             String pass = new String(passField.getPassword());
 
             if (user.isEmpty() || pass.isEmpty()) {
-                JOptionPane.showMessageDialog(frame, "Completa todos los campos.");
+                Warning.mensaje(frame, "Completa todos los campos.");
                 return;
             }
 
             Usuario u = sistema.login(user, pass);
-
             if (u != null) {
-                JOptionPane.showMessageDialog(frame, "¡Bienvenido " + user + "!");
+                Warning.mensaje(frame, "¡Bienvenido " + user + "!");
                 frame.dispose();
                 new MenuPrincipal(sistema, u);
             } else {
-                JOptionPane.showMessageDialog(frame, "Usuario o contraseña incorrectos.");
+                Warning.mensaje(frame, "Usuario o contraseña incorrectos.");
             }
         });
 
