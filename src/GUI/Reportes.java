@@ -7,17 +7,14 @@ package GUI;
 import Users.Usuario;
 import almacenamiento.Sistema;
 import java.awt.*;
-import java.io.File;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
- * Pantalla de Reportes:
  * @author nasry
  */
-public class Reportes extends JFrame {
+public class Reportes {
 
     private JFrame  frame;
     private Sistema sistema;
@@ -59,8 +56,8 @@ public class Reportes extends JFrame {
         tabs.setBounds(15, 68, 510, 340);
         tabs.setFont(new Font("Century", Font.BOLD, 14));
         tabs.setBackground(new Color(255, 200, 80));
-        tabs.addTab("Ranking Jugadores", crearTabRanking());
-        tabs.addTab("Mis Últimos Partidos", crearTabLogs());
+        tabs.addTab("🏆 Ranking Jugadores",    crearTabRanking());
+        tabs.addTab("📋 Mis Últimos Partidos", crearTabLogs());
         panel.add(tabs);
 
         // ── Botón VOLVER ──
@@ -89,9 +86,8 @@ public class Reportes extends JFrame {
         tab.setBackground(new Color(255, 215, 114));
 
         // Encabezado
-        String[] cols = {"#", "USERNAME", "PUNTOS"};
+        String[] cols   = {"#", "USERNAME", "PUNTOS"};
         int[]    anchos = {40, 280, 130};
-
         int x = 10;
         for (int i = 0; i < cols.length; i++) {
             JLabel h = new JLabel(cols[i], SwingConstants.CENTER);
@@ -105,7 +101,7 @@ public class Reportes extends JFrame {
             x += anchos[i];
         }
 
-        // Filas del ranking
+        // Filas
         ArrayList<Usuario> ranking = sistema.getRankingJugadores();
 
         JPanel filas = new JPanel(null);
@@ -113,15 +109,15 @@ public class Reportes extends JFrame {
         filas.setBackground(new Color(255, 215, 114));
 
         for (int i = 0; i < ranking.size(); i++) {
-            Usuario u   = ranking.get(i);
-            int     fy  = i * 36;
+            Usuario u    = ranking.get(i);
+            int     fy   = i * 36;
             Color   fondo = (i % 2 == 0)
                 ? new Color(255, 228, 161)
                 : new Color(255, 215, 114);
 
-            agregarCeldaFila(filas, String.valueOf(i + 1),     fondo,  10,  fy, 40,  34);
-            agregarCeldaFila(filas, u.getUsername(),           fondo,  50,  fy, 280, 34);
-            agregarCeldaFila(filas, u.getPuntos() + " pts",    fondo, 330,  fy, 130, 34);
+            agregarCelda(filas, String.valueOf(i + 1),  fondo,  10, fy,  40, 34);
+            agregarCelda(filas, u.getUsername(),         fondo,  50, fy, 280, 34);
+            agregarCelda(filas, u.getPuntos() + " pts",  fondo, 330, fy, 130, 34);
         }
 
         if (ranking.isEmpty()) {
@@ -139,8 +135,8 @@ public class Reportes extends JFrame {
         return tab;
     }
 
-    private void agregarCeldaFila(JPanel panel, String texto, Color fondo,
-                                   int x, int y, int w, int h) {
+    private void agregarCelda(JPanel panel, String texto, Color fondo,
+                               int x, int y, int w, int h) {
         JLabel lbl = new JLabel(texto, SwingConstants.CENTER);
         lbl.setBounds(x, y, w, h);
         lbl.setFont(new Font("Century", Font.PLAIN, 13));
@@ -157,7 +153,6 @@ public class Reportes extends JFrame {
         JPanel tab = new JPanel(null);
         tab.setBackground(new Color(255, 215, 114));
 
-        // Área de texto con los logs
         JTextArea areaLogs = new JTextArea();
         areaLogs.setEditable(false);
         areaLogs.setFont(new Font("Century", Font.PLAIN, 13));
@@ -179,45 +174,10 @@ public class Reportes extends JFrame {
         }
 
         JScrollPane scroll = new JScrollPane(areaLogs);
-        scroll.setBounds(10, 10, 470, 220);
+        scroll.setBounds(10, 10, 470, 275);
         scroll.setBorder(new LineBorder(Color.BLACK, 2));
         tab.add(scroll);
 
-        // ── Botón EXPORTAR ──
-        JButton btnExportar = new JButton("EXPORTAR A .TXT");
-        btnExportar.setBounds(130, 242, 210, 40);
-        btnExportar.setBackground(new Color(0, 100, 0));
-        btnExportar.setForeground(Color.WHITE);
-        btnExportar.setFont(new Font("Century", Font.BOLD, 14));
-        btnExportar.setBorder(new LineBorder(Color.BLACK, 2));
-        btnExportar.setFocusPainted(false);
-        btnExportar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnExportar.addActionListener(e -> exportarLogs());
-        tab.add(btnExportar);
-
         return tab;
-    }
-
-    // ================================================================
-    //  EXPORTAR LOGS
-    // ================================================================
-    private void exportarLogs() {
-        JFileChooser chooser = new JFileChooser();
-        chooser.setDialogTitle("Guardar logs de partidas");
-        chooser.setSelectedFile(new File(actual.getUsername() + "_partidas.txt"));
-        chooser.setFileFilter(new FileNameExtensionFilter("Archivo de texto (*.txt)", "txt"));
-
-        int resultado = chooser.showSaveDialog(frame);
-        if (resultado != JFileChooser.APPROVE_OPTION) return;
-
-        String ruta = chooser.getSelectedFile().getAbsolutePath();
-        if (!ruta.endsWith(".txt")) ruta += ".txt";
-
-        boolean ok = sistema.exportarLogsUsuario(actual.getUsername(), ruta);
-        if (ok) {
-            Warning.mensaje(frame, "Logs exportados correctamente.");
-        } else {
-            Warning.mensaje(frame, "Error al exportar.\nIntenta de nuevo.");
-        }
     }
 }
