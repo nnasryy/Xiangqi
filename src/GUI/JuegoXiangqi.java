@@ -9,17 +9,14 @@ import javax.swing.*;
 /**
  * @author nasry
  */
-public class JuegoXiangqi extends JFrame {
+public class JuegoXiangqi {
 
-    private JFrame   frame;
-    private Sistema  sistema;
-    private Usuario  jugador1;
-    private Usuario  jugador2;
-    private Tablero  tablero;
-
-    private JLabel   lblTurno;
-    private JLabel   lblJ1Puntos;
-    private JLabel   lblJ2Puntos;
+    private JFrame  frame;
+    private Sistema sistema;
+    private Usuario jugador1;
+    private Usuario jugador2;
+    private Tablero tablero;
+    private JLabel  lblTurno;
 
     public JuegoXiangqi(Sistema sistema, Usuario jugador1, Usuario jugador2) {
         this.sistema  = sistema;
@@ -32,14 +29,10 @@ public class JuegoXiangqi extends JFrame {
         frame.setResizable(false);
         frame.setLayout(new BorderLayout());
 
-        // ── Tablero (centro) ──
         tablero = new Tablero();
         frame.add(tablero, BorderLayout.CENTER);
-
-        // ── Panel lateral (derecha) ──
         frame.add(crearPanelLateral(), BorderLayout.EAST);
 
-        // ── Callbacks del tablero ──
         tablero.setOnTurnoChange(() -> actualizarTurno());
         tablero.setOnGanador(info -> procesarFin(info));
 
@@ -53,81 +46,74 @@ public class JuegoXiangqi extends JFrame {
     // ================================================================
     private JPanel crearPanelLateral() {
         JPanel panel = new JPanel(null);
-        panel.setPreferredSize(new Dimension(200, 700));
+        panel.setPreferredSize(new Dimension(220, 700));
         panel.setBackground(new Color(60, 30, 5));
 
+        // ── Título ──
         JLabel titulo = new JLabel("XIANGQI", SwingConstants.CENTER);
-        titulo.setBounds(0, 20, 200, 40);
-        titulo.setFont(new Font("Serif", Font.BOLD, 22));
+        titulo.setBounds(0, 30, 220, 50);
+        titulo.setFont(new Font("Serif", Font.BOLD, 28));
         titulo.setForeground(new Color(255, 210, 80));
         panel.add(titulo);
 
-        JSeparator sep1 = new JSeparator();
-        sep1.setBounds(15, 65, 170, 5);
-        sep1.setForeground(new Color(255, 210, 80));
-        panel.add(sep1);
+        separador(panel, 90);
 
-        // Jugador 1 (ROJO)
-        JLabel lblJ1 = new JLabel("- " + jugador1.getUsername(), SwingConstants.CENTER);
-        lblJ1.setBounds(0, 80, 200, 30);
-        lblJ1.setFont(new Font("Arial", Font.BOLD, 14));
+        // ── Jugador 1 (ROJO) ──
+        JLabel lblJ1titulo = new JLabel("JUGADOR ROJO", SwingConstants.CENTER);
+        lblJ1titulo.setBounds(0, 105, 220, 25);
+        lblJ1titulo.setFont(new Font("Century", Font.BOLD, 13));
+        lblJ1titulo.setForeground(new Color(220, 80, 80));
+        panel.add(lblJ1titulo);
+
+        JLabel lblJ1 = new JLabel(jugador1.getUsername(), SwingConstants.CENTER);
+        lblJ1.setBounds(0, 130, 220, 35);
+        lblJ1.setFont(new Font("Century", Font.BOLD, 20));
         lblJ1.setForeground(new Color(220, 80, 80));
         panel.add(lblJ1);
 
-        lblJ1Puntos = new JLabel("Puntos: " + jugador1.getPuntos(), SwingConstants.CENTER);
-        lblJ1Puntos.setBounds(0, 108, 200, 20);
-        lblJ1Puntos.setFont(new Font("Arial", Font.PLAIN, 12));
-        lblJ1Puntos.setForeground(Color.LIGHT_GRAY);
-        panel.add(lblJ1Puntos);
-
+        // ── VS ──
         JLabel vs = new JLabel("VS", SwingConstants.CENTER);
-        vs.setBounds(0, 135, 200, 30);
-        vs.setFont(new Font("Serif", Font.BOLD, 18));
+        vs.setBounds(0, 175, 220, 40);
+        vs.setFont(new Font("Serif", Font.BOLD, 26));
         vs.setForeground(new Color(255, 210, 80));
         panel.add(vs);
 
-        // Jugador 2 (NEGRO)
-        JLabel lblJ2 = new JLabel("- " + jugador2.getUsername(), SwingConstants.CENTER);
-        lblJ2.setBounds(0, 170, 200, 30);
-        lblJ2.setFont(new Font("Arial", Font.BOLD, 14));
+        // ── Jugador 2 (NEGRO) ──
+        JLabel lblJ2titulo = new JLabel("JUGADOR NEGRO", SwingConstants.CENTER);
+        lblJ2titulo.setBounds(0, 220, 220, 25);
+        lblJ2titulo.setFont(new Font("Century", Font.BOLD, 13));
+        lblJ2titulo.setForeground(new Color(180, 180, 180));
+        panel.add(lblJ2titulo);
+
+        JLabel lblJ2 = new JLabel(jugador2.getUsername(), SwingConstants.CENTER);
+        lblJ2.setBounds(0, 245, 220, 35);
+        lblJ2.setFont(new Font("Century", Font.BOLD, 20));
         lblJ2.setForeground(new Color(180, 180, 180));
         panel.add(lblJ2);
 
-        lblJ2Puntos = new JLabel("Puntos: " + jugador2.getPuntos(), SwingConstants.CENTER);
-        lblJ2Puntos.setBounds(0, 198, 200, 20);
-        lblJ2Puntos.setFont(new Font("Arial", Font.PLAIN, 12));
-        lblJ2Puntos.setForeground(Color.LIGHT_GRAY);
-        panel.add(lblJ2Puntos);
+        separador(panel, 295);
 
-        JSeparator sep2 = new JSeparator();
-        sep2.setBounds(15, 228, 170, 5);
-        sep2.setForeground(new Color(255, 210, 80));
-        panel.add(sep2);
-
-        // Turno
-        JLabel lblTurnoTitle = new JLabel("TURNO:", SwingConstants.CENTER);
-        lblTurnoTitle.setBounds(0, 242, 200, 25);
-        lblTurnoTitle.setFont(new Font("Arial", Font.BOLD, 13));
+        // ── Turno ──
+        JLabel lblTurnoTitle = new JLabel("TURNO ACTUAL", SwingConstants.CENTER);
+        lblTurnoTitle.setBounds(0, 312, 220, 28);
+        lblTurnoTitle.setFont(new Font("Century", Font.BOLD, 14));
         lblTurnoTitle.setForeground(Color.LIGHT_GRAY);
         panel.add(lblTurnoTitle);
 
         lblTurno = new JLabel(jugador1.getUsername(), SwingConstants.CENTER);
-        lblTurno.setBounds(0, 265, 200, 35);
-        lblTurno.setFont(new Font("Arial", Font.BOLD, 16));
+        lblTurno.setBounds(0, 340, 220, 45);
+        lblTurno.setFont(new Font("Century", Font.BOLD, 20));
         lblTurno.setForeground(new Color(220, 80, 80));
         panel.add(lblTurno);
 
-        JSeparator sep3 = new JSeparator();
-        sep3.setBounds(15, 308, 170, 5);
-        sep3.setForeground(new Color(255, 210, 80));
-        panel.add(sep3);
+        separador(panel, 395);
 
-        // Botón RETIRAR
+        // ── Botón RETIRAR ──
         JButton btnRetirar = new JButton("RETIRAR");
-        btnRetirar.setBounds(25, 325, 150, 45);
+        btnRetirar.setBounds(20, 415, 180, 55);
         btnRetirar.setBackground(new Color(153, 0, 0));
         btnRetirar.setForeground(Color.WHITE);
-        btnRetirar.setFont(new Font("Arial", Font.BOLD, 14));
+        btnRetirar.setFont(new Font("Century", Font.BOLD, 18));
         btnRetirar.setBorder(BorderFactory.createLineBorder(new Color(255, 100, 100), 2));
         btnRetirar.setFocusPainted(false);
         btnRetirar.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -135,6 +121,13 @@ public class JuegoXiangqi extends JFrame {
         panel.add(btnRetirar);
 
         return panel;
+    }
+
+    private void separador(JPanel panel, int y) {
+        JSeparator sep = new JSeparator();
+        sep.setBounds(15, y, 190, 4);
+        sep.setForeground(new Color(255, 210, 80));
+        panel.add(sep);
     }
 
     // ================================================================
@@ -191,9 +184,6 @@ public class JuegoXiangqi extends JFrame {
 
         sistema.guardarLogPartida(usernameGanador, usernamePerdedor, porRetiro);
 
-        lblJ1Puntos.setText("Puntos: " + jugador1.getPuntos());
-        lblJ2Puntos.setText("Puntos: " + jugador2.getPuntos());
-
         String mensaje;
         if (porRetiro) {
             mensaje = quienSeRetiro + " SE HA RETIRADO\n" +
@@ -209,5 +199,4 @@ public class JuegoXiangqi extends JFrame {
         new MenuPrincipal(sistema,
             ganadorColor.equals("rojo") ? jugador1 : jugador2);
     }
-    
 }

@@ -56,8 +56,8 @@ public class Reportes {
         tabs.setBounds(15, 68, 510, 340);
         tabs.setFont(new Font("Century", Font.BOLD, 14));
         tabs.setBackground(new Color(255, 200, 80));
-        tabs.addTab("🏆 Ranking Jugadores",    crearTabRanking());
-        tabs.addTab("📋 Mis Últimos Partidos", crearTabLogs());
+        tabs.addTab(" Ranking Jugadores",    crearTabRanking());
+        tabs.addTab("Mis Últimos Partidos", crearTabLogs());
         panel.add(tabs);
 
         // ── Botón VOLVER ──
