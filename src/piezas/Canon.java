@@ -7,8 +7,6 @@ package piezas;
 import java.util.ArrayList;
 
 /**
- * Sin captura: se mueve como el Carro.
- * Para capturar: necesita exactamente 1 pieza intermedia ("pantalla").
  * @author nasry
  */
 public class Canon extends Pieza {
@@ -33,17 +31,16 @@ public class Canon extends Pieza {
 
                 if (!pantalla) {
                     if (p == null) {
-                        movs.add(new int[]{nf, nc}); // movimiento libre
+                        movs.add(new int[]{nf, nc}); 
                     } else {
-                        pantalla = true; // encontró la pantalla, ahora busca captura
+                        pantalla = true; 
                     }
                 } else {
                     if (p != null) {
-                        // Solo captura si es enemigo y es la primera pieza tras la pantalla
                         if (!p.getColor().equals(this.color)) {
                             movs.add(new int[]{nf, nc});
                         }
-                        break; // con o sin captura, se detiene
+                        break; 
                     }
                 }
 

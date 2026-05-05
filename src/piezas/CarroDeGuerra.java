@@ -32,9 +32,9 @@ public class CarroDeGuerra extends Pieza {
                     movs.add(new int[]{nf, nc});
                 } else {
                     if (!tablero[nf][nc].getColor().equals(this.color)) {
-                        movs.add(new int[]{nf, nc}); // captura enemigo
+                        movs.add(new int[]{nf, nc}); 
                     }
-                    break; // bloqueado, no puede seguir
+                    break; 
                 }
                 nf += d[0];
                 nc += d[1];

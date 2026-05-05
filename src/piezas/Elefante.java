@@ -7,9 +7,6 @@ package piezas;
 import java.util.ArrayList;
 
 /**
- * Se mueve exactamente 2 casillas en diagonal.
- * No puede cruzar el río (filas 0-4 negro, 5-9 rojo).
- * Bloqueado si hay pieza en la casilla intermedia ("ojo del elefante").
  * @author nasry
  */
 public class Elefante extends Pieza {
@@ -37,13 +34,13 @@ public class Elefante extends Pieza {
             int nc = col  + d[1];
 
             if (!enTablero(nf, nc))            continue;
-            if (nf < filaMin || nf > filaMax)  continue; // no cruza el río
+            if (nf < filaMin || nf > filaMax)  continue; 
             if (!puedeMoverA(nf, nc, tablero)) continue;
 
-            // Verificar "ojo del elefante" — casilla intermedia
+        
             int ojoFila = fila + d[0] / 2;
             int ojoCol  = col  + d[1] / 2;
-            if (tablero[ojoFila][ojoCol] != null) continue; // bloqueado
+            if (tablero[ojoFila][ojoCol] != null) continue; 
 
             movs.add(new int[]{nf, nc});
         }

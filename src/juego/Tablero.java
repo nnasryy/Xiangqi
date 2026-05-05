@@ -6,21 +6,15 @@ import java.awt.event.*;
 import javax.swing.*;
 
 /**
- * Tablero estilo americano:
- * - Casillas alternadas (como ajedrez)
- * - 9 columnas x 10 filas
- * - Piezas en el centro de cada casilla
- * - Palacio 3x3 marcado con borde grueso
- * - Río: línea simple entre fila 4 y 5
  * @author nasry
  */
 public class Tablero extends JPanel {
 
     private static final int FILAS      = 10;
     private static final int COLS       = 9;
-    private static final int CELDA      = 60;   // tamaño de cada casilla
+    private static final int CELDA      = 60;   
     private static final int MARGEN     = 2;
-    private static final int ICON_SIZE  = 52;   // tamaño de la imagen de pieza
+    private static final int ICON_SIZE  = 52; 
 
     private Pieza[][]   tablero            = new Pieza[FILAS][COLS];
     private int[]       seleccionada       = null;
@@ -34,14 +28,12 @@ public class Tablero extends JPanel {
 
     private java.util.HashMap<String, ImageIcon> imagenes = new java.util.HashMap<>();
 
-    // ================================================================
-    //  CONSTRUCTOR
-    // ================================================================
+
     public Tablero() {
         int ancho = MARGEN * 2 + CELDA * COLS;
         int alto  = MARGEN * 2 + CELDA * FILAS;
         setPreferredSize(new Dimension(ancho, alto));
-        setBackground(new Color(200, 200, 200));
+        setBackground(new Color(26, 24, 24));
 
         cargarImagenes();
         inicializarPiezas();
@@ -54,9 +46,6 @@ public class Tablero extends JPanel {
         });
     }
 
-    // ================================================================
-    //  CARGAR IMÁGENES
-    // ================================================================
     private void cargarImagenes() {
         String[] nombres = {"general","oficial","elefante","caballo","carro","canon","soldado"};
         String[] colores = {"rojo","negro"};
@@ -84,12 +73,8 @@ public class Tablero extends JPanel {
         return p.getColor() + "_" + nombre;
     }
 
-    // ================================================================
-    //  INICIALIZAR PIEZAS
-    //  Fila 0 = arriba (negro), Fila 9 = abajo (rojo)
-    // ================================================================
     private void inicializarPiezas() {
-        // NEGRO (arriba)
+   
         tablero[0][0] = new CarroDeGuerra("negro");
         tablero[0][1] = new Caballo("negro");
         tablero[0][2] = new Elefante("negro");
@@ -107,7 +92,7 @@ public class Tablero extends JPanel {
         tablero[3][6] = new Soldado("negro");
         tablero[3][8] = new Soldado("negro");
 
-        // ROJO (abajo)
+
         tablero[9][0] = new CarroDeGuerra("rojo");
         tablero[9][1] = new Caballo("rojo");
         tablero[9][2] = new Elefante("rojo");
@@ -126,10 +111,7 @@ public class Tablero extends JPanel {
         tablero[6][8] = new Soldado("rojo");
     }
 
-    // ================================================================
-    //  MANEJO DE CLICS
-    //  Las piezas están en el centro de las casillas
-    // ================================================================
+
     private void manejarClic(int px, int py) {
         if (!juegoActivo) return;
 
@@ -192,9 +174,6 @@ public class Tablero extends JPanel {
         repaint();
     }
 
-    // ================================================================
-    //  PINTADO
-    // ================================================================
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -208,12 +187,10 @@ public class Tablero extends JPanel {
         dibujarPiezas(g2);
     }
 
-    // ================================================================
-    //  CASILLAS ALTERNADAS
-    // ================================================================
+
     private void dibujarCasillas(Graphics2D g2) {
         Color claro  = new Color(240, 217, 181); // beige claro
-        Color oscuro = new Color(100, 149, 80);  // verde oscuro
+        Color oscuro = new Color(204, 158, 59);  // verde oscuro
 
         for (int f = 0; f < FILAS; f++) {
             for (int c = 0; c < COLS; c++) {
@@ -225,27 +202,20 @@ public class Tablero extends JPanel {
         }
     }
 
-    // ================================================================
-    //  PALACIO 3x3 — borde grueso, sin diagonales
-    //  Negro: cols 3-5, filas 0-2
-    //  Rojo:  cols 3-5, filas 7-9
-    // ================================================================
+ 
     private void dibujarPalacios(Graphics2D g2) {
         g2.setColor(Color.WHITE);
         g2.setStroke(new BasicStroke(3f));
 
-        // Palacio negro
         g2.drawRect(MARGEN + 3 * CELDA, MARGEN,
                     3 * CELDA, 3 * CELDA);
 
-        // Palacio rojo
+
         g2.drawRect(MARGEN + 3 * CELDA, MARGEN + 7 * CELDA,
                     3 * CELDA, 3 * CELDA);
     }
 
-    // ================================================================
-    //  RÍO — línea simple entre fila 4 y fila 5
-    // ================================================================
+   
     private void dibujarRio(Graphics2D g2) {
         int y  = MARGEN + 5 * CELDA;  // línea encima de fila 5
         int x1 = MARGEN;
@@ -256,13 +226,11 @@ public class Tablero extends JPanel {
         g2.drawLine(x1, y, x2, y);
     }
 
-    // ================================================================
-    //  RESALTAR SELECCIÓN Y MOVIMIENTOS
-    // ================================================================
+
     private void dibujarMovimientosValidos(Graphics2D g2) {
         if (seleccionada == null) return;
 
-        // Casilla seleccionada — resaltar en amarillo
+    
         int sx = MARGEN + seleccionada[1] * CELDA;
         int sy = MARGEN + seleccionada[0] * CELDA;
         g2.setColor(new Color(255, 255, 0, 140));
@@ -273,13 +241,13 @@ public class Tablero extends JPanel {
             int my = MARGEN + m[0] * CELDA;
 
             if (tablero[m[0]][m[1]] != null) {
-                // Captura — borde rojo
+
                 g2.setColor(new Color(220, 50, 50, 180));
                 g2.setStroke(new BasicStroke(3f));
                 g2.drawRect(mx + 2, my + 2, CELDA - 4, CELDA - 4);
             } else {
-                // Movimiento libre — punto verde en el centro
-                g2.setColor(new Color(50, 200, 50, 200));
+       
+                g2.setColor(new Color(50, 200, 50, 250));
                 int cx = mx + CELDA / 2;
                 int cy = my + CELDA / 2;
                 g2.fillOval(cx - 8, cy - 8, 16, 16);
@@ -287,9 +255,7 @@ public class Tablero extends JPanel {
         }
     }
 
-    // ================================================================
-    //  DIBUJAR PIEZAS — centradas en cada casilla
-    // ================================================================
+
     private void dibujarPiezas(Graphics2D g2) {
         for (int f = 0; f < FILAS; f++) {
             for (int c = 0; c < COLS; c++) {
@@ -307,9 +273,7 @@ public class Tablero extends JPanel {
         }
     }
 
-    // ================================================================
-    //  API PÚBLICA
-    // ================================================================
+ 
     public String    getTurno()      { return turno;       }
     public boolean   isJuegoActivo() { return juegoActivo; }
     public Pieza[][] getTablero()    { return tablero;     }

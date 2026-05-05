@@ -7,8 +7,6 @@ package piezas;
 import java.util.ArrayList;
 
 /**
- * Se mueve 1 casilla en diagonal.
- * No puede salir del palacio 3x3.
  * @author nasry
  */
 public class Oficial extends Pieza {

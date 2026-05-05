@@ -11,7 +11,7 @@ public class Sistema implements Persistencia {
     private ArrayList<Usuario> usuarios = new ArrayList<>();
 
     // ================================================================
-    //  VALIDACIONES INTERNAS
+    //  VALIDACIONES DE MI PASSWORD O DE MI USER
     // ================================================================
     private boolean passwordValido(String password) {
         return password != null && password.length() == 5;
@@ -96,7 +96,7 @@ public class Sistema implements Persistencia {
     }
 
     // ================================================================
-    //  OBTENER LOGS (del más reciente al más viejo)
+    //  OBTENER LOGS 
     // ================================================================
     @Override
     public ArrayList<String> obtenerLogsUsuario(String username) {
@@ -112,7 +112,7 @@ public class Sistema implements Persistencia {
     }
 
     // ================================================================
-    //  RANKING (bubble sort recursivo — función recursiva #1)
+    //  RANKING 
     // ================================================================
     @Override
     public ArrayList<Usuario> getRankingJugadores() {
@@ -134,7 +134,7 @@ public class Sistema implements Persistencia {
     }
 
     // ================================================================
-    //  UTILIDADES
+    //  PARA MIS WARNINGS
     // ================================================================
     @Override
     public boolean usernameExiste(String username) {

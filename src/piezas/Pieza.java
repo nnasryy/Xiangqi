@@ -29,29 +29,22 @@ public abstract class Pieza {
         return false;
     }
 
-    // ================================================================
-    //  GETTERS
-    // ================================================================
     public String getColor()  { return color;  }
     public String getNombre() { return nombre; }
 
-    // ================================================================
-    //  UTILIDADES PROTEGIDAS (disponibles para todas las subclases)
-    // ================================================================
+    
 
-    /** Verifica si una posición está dentro del tablero (10 filas x 9 cols). */
     protected boolean enTablero(int fila, int col) {
         return fila >= 0 && fila < 10 && col >= 0 && col < 9;
     }
 
-    /** Verifica si la casilla está vacía o tiene pieza enemiga (se puede mover ahí). */
     protected boolean puedeMoverA(int fila, int col, Pieza[][] tablero) {
         if (!enTablero(fila, col)) return false;
         Pieza p = tablero[fila][col];
         return p == null || !p.getColor().equals(this.color);
     }
 
-    /** Verifica si hay alguna pieza entre dos puntos en la misma fila. */
+
     protected boolean hayPiezaEntreFilas(int fila, int colMin, int colMax, Pieza[][] tablero) {
         for (int c = colMin + 1; c < colMax; c++) {
             if (tablero[fila][c] != null) return true;
@@ -59,7 +52,7 @@ public abstract class Pieza {
         return false;
     }
 
-    /** Verifica si hay alguna pieza entre dos puntos en la misma columna. */
+
     protected boolean hayPiezaEntreCols(int colum, int filaMin, int filaMax, Pieza[][] tablero) {
         for (int f = filaMin + 1; f < filaMax; f++) {
             if (tablero[f][colum] != null) return true;
@@ -67,7 +60,7 @@ public abstract class Pieza {
         return false;
     }
 
-    /** Cuenta piezas entre dos puntos en la misma fila. */
+
     protected int contarPiezasEntreFilas(int fila, int colMin, int colMax, Pieza[][] tablero) {
         int count = 0;
         for (int c = colMin + 1; c < colMax; c++) {
@@ -76,7 +69,7 @@ public abstract class Pieza {
         return count;
     }
 
-    /** Cuenta piezas entre dos puntos en la misma columna. */
+
     protected int contarPiezasEntreCols(int col, int filaMin, int filaMax, Pieza[][] tablero) {
         int count = 0;
         for (int f = filaMin + 1; f < filaMax; f++) {
