@@ -3,7 +3,9 @@ package GUI;
 import Users.Usuario;
 import almacenamiento.Sistema;
 import juego.Tablero;
+import piezas.*;
 import java.awt.*;
+import java.util.ArrayList;
 import javax.swing.*;
 
 /**
@@ -13,10 +15,13 @@ public class JuegoXiangqi {
 
     private JFrame  frame;
     private Sistema sistema;
-    private Usuario jugador1;
-    private Usuario jugador2;
+    private Usuario jugador1;  // rojo  — izquierda
+    private Usuario jugador2;  // negro — derecha
     private Tablero tablero;
     private JLabel  lblTurno;
+
+    private JPanel panelCapturasJ1;
+    private JPanel panelCapturasJ2;
 
     public JuegoXiangqi(Sistema sistema, Usuario jugador1, Usuario jugador2) {
         this.sistema  = sistema;
@@ -29,12 +34,28 @@ public class JuegoXiangqi {
         frame.setResizable(false);
         frame.setLayout(new BorderLayout());
 
+        // ── Norte: título + turno ──
+        frame.add(crearPanelNorte(),    BorderLayout.NORTH);
+
+        // ── Centro: tablero con margen marrón ──
+        JPanel wrapTablero = new JPanel(new GridBagLayout());
+        wrapTablero.setBackground(new Color(139, 90, 43));
         tablero = new Tablero();
-        frame.add(tablero, BorderLayout.CENTER);
-        frame.add(crearPanelLateral(), BorderLayout.EAST);
+        wrapTablero.add(tablero);
+        frame.add(wrapTablero, BorderLayout.CENTER);
+
+        // ── Izquierda: jugador 1 (rojo) ──
+        frame.add(crearPanelJugador(jugador1, "rojo", true),  BorderLayout.WEST);
+
+        // ── Derecha: jugador 2 (negro) ──
+        frame.add(crearPanelJugador(jugador2, "negro", false), BorderLayout.EAST);
+
+        // ── Sur: botón retirar ──
+        frame.add(crearPanelSur(), BorderLayout.SOUTH);
 
         tablero.setOnTurnoChange(() -> actualizarTurno());
         tablero.setOnGanador(info -> procesarFin(info));
+        tablero.setOnCaptura((pieza, colorGanador) -> registrarCaptura(pieza, colorGanador));
 
         frame.pack();
         frame.setLocationRelativeTo(null);
@@ -42,78 +63,46 @@ public class JuegoXiangqi {
     }
 
     // ================================================================
-    //  PANEL LATERAL
+    //  PANEL NORTE — título + turno
     // ================================================================
-    private JPanel crearPanelLateral() {
+    private JPanel crearPanelNorte() {
         JPanel panel = new JPanel(null);
-        panel.setPreferredSize(new Dimension(220, 700));
+        panel.setPreferredSize(new Dimension(800, 90));
         panel.setBackground(new Color(60, 30, 5));
 
-        // ── Título ──
         JLabel titulo = new JLabel("XIANGQI", SwingConstants.CENTER);
-        titulo.setBounds(0, 30, 220, 50);
-        titulo.setFont(new Font("Serif", Font.BOLD, 28));
+        titulo.setBounds(0, 8, 800, 40);
+        titulo.setFont(new Font("Serif", Font.BOLD, 32));
         titulo.setForeground(new Color(255, 210, 80));
         panel.add(titulo);
 
-        separador(panel, 90);
+        JLabel lblTurnoLabel = new JLabel("TURNO:", SwingConstants.CENTER);
+        lblTurnoLabel.setBounds(290, 52, 80, 28);
+        lblTurnoLabel.setFont(new Font("Century", Font.BOLD, 14));
+        lblTurnoLabel.setForeground(Color.LIGHT_GRAY);
+        panel.add(lblTurnoLabel);
 
-        // ── Jugador 1 (ROJO) ──
-        JLabel lblJ1titulo = new JLabel("JUGADOR ROJO", SwingConstants.CENTER);
-        lblJ1titulo.setBounds(0, 105, 220, 25);
-        lblJ1titulo.setFont(new Font("Century", Font.BOLD, 13));
-        lblJ1titulo.setForeground(new Color(220, 80, 80));
-        panel.add(lblJ1titulo);
-
-        JLabel lblJ1 = new JLabel(jugador1.getUsername(), SwingConstants.CENTER);
-        lblJ1.setBounds(0, 130, 220, 35);
-        lblJ1.setFont(new Font("Century", Font.BOLD, 20));
-        lblJ1.setForeground(new Color(220, 80, 80));
-        panel.add(lblJ1);
-
-        // ── VS ──
-        JLabel vs = new JLabel("VS", SwingConstants.CENTER);
-        vs.setBounds(0, 175, 220, 40);
-        vs.setFont(new Font("Serif", Font.BOLD, 26));
-        vs.setForeground(new Color(255, 210, 80));
-        panel.add(vs);
-
-        // ── Jugador 2 (NEGRO) ──
-        JLabel lblJ2titulo = new JLabel("JUGADOR NEGRO", SwingConstants.CENTER);
-        lblJ2titulo.setBounds(0, 220, 220, 25);
-        lblJ2titulo.setFont(new Font("Century", Font.BOLD, 13));
-        lblJ2titulo.setForeground(new Color(180, 180, 180));
-        panel.add(lblJ2titulo);
-
-        JLabel lblJ2 = new JLabel(jugador2.getUsername(), SwingConstants.CENTER);
-        lblJ2.setBounds(0, 245, 220, 35);
-        lblJ2.setFont(new Font("Century", Font.BOLD, 20));
-        lblJ2.setForeground(new Color(180, 180, 180));
-        panel.add(lblJ2);
-
-        separador(panel, 295);
-
-        // ── Turno ──
-        JLabel lblTurnoTitle = new JLabel("TURNO ACTUAL", SwingConstants.CENTER);
-        lblTurnoTitle.setBounds(0, 312, 220, 28);
-        lblTurnoTitle.setFont(new Font("Century", Font.BOLD, 14));
-        lblTurnoTitle.setForeground(Color.LIGHT_GRAY);
-        panel.add(lblTurnoTitle);
-
-        lblTurno = new JLabel(jugador1.getUsername(), SwingConstants.CENTER);
-        lblTurno.setBounds(0, 340, 220, 45);
-        lblTurno.setFont(new Font("Century", Font.BOLD, 20));
+        lblTurno = new JLabel(jugador1.getUsername(), SwingConstants.LEFT);
+        lblTurno.setBounds(375, 50, 200, 32);
+        lblTurno.setFont(new Font("Century", Font.BOLD, 22));
         lblTurno.setForeground(new Color(220, 80, 80));
         panel.add(lblTurno);
 
-        separador(panel, 395);
+        return panel;
+    }
 
-        // ── Botón RETIRAR ──
+    // ================================================================
+    //  PANEL SUR — botón retirar
+    // ================================================================
+    private JPanel crearPanelSur() {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 10));
+        panel.setBackground(new Color(60, 30, 5));
+
         JButton btnRetirar = new JButton("RETIRAR");
-        btnRetirar.setBounds(20, 415, 180, 55);
+        btnRetirar.setPreferredSize(new Dimension(160, 45));
         btnRetirar.setBackground(new Color(153, 0, 0));
         btnRetirar.setForeground(Color.WHITE);
-        btnRetirar.setFont(new Font("Century", Font.BOLD, 18));
+        btnRetirar.setFont(new Font("Century", Font.BOLD, 16));
         btnRetirar.setBorder(BorderFactory.createLineBorder(new Color(255, 100, 100), 2));
         btnRetirar.setFocusPainted(false);
         btnRetirar.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -123,11 +112,100 @@ public class JuegoXiangqi {
         return panel;
     }
 
-    private void separador(JPanel panel, int y) {
+    // ================================================================
+    //  PANEL JUGADOR (izquierda o derecha)
+    // ================================================================
+    private JPanel crearPanelJugador(Usuario jugador, String color, boolean esRojo) {
+        JPanel panel = new JPanel(null);
+        panel.setPreferredSize(new Dimension(170, 600));
+        panel.setBackground(new Color(60, 30, 5));
+
+        Color colorTexto = esRojo
+            ? new Color(220, 80, 80)
+            : new Color(180, 180, 180);
+
+        // ── Etiqueta color ──
+        JLabel lblColor = new JLabel(esRojo ? "JUGADOR ROJO" : "JUGADOR NEGRO",
+                                     SwingConstants.CENTER);
+        lblColor.setBounds(0, 20, 170, 22);
+        lblColor.setFont(new Font("Century", Font.BOLD, 12));
+        lblColor.setForeground(colorTexto);
+        panel.add(lblColor);
+
+        // ── Username ──
+        JLabel lblNombre = new JLabel(jugador.getUsername(), SwingConstants.CENTER);
+        lblNombre.setBounds(0, 44, 170, 32);
+        lblNombre.setFont(new Font("Century", Font.BOLD, 18));
+        lblNombre.setForeground(colorTexto);
+        panel.add(lblNombre);
+
+        // ── Separador ──
         JSeparator sep = new JSeparator();
-        sep.setBounds(15, y, 190, 4);
+        sep.setBounds(10, 82, 150, 3);
         sep.setForeground(new Color(255, 210, 80));
         panel.add(sep);
+
+        // ── Label capturas ──
+        JLabel lblCap = new JLabel("CAPTURADAS", SwingConstants.CENTER);
+        lblCap.setBounds(0, 90, 170, 20);
+        lblCap.setFont(new Font("Century", Font.BOLD, 11));
+        lblCap.setForeground(new Color(200, 170, 80));
+        panel.add(lblCap);
+
+        // ── Panel de iconos capturados ──
+        JPanel panelCapturas = new JPanel(new WrapLayout(FlowLayout.CENTER, 3, 3));
+        panelCapturas.setBounds(5, 112, 160, 420);
+        panelCapturas.setBackground(new Color(80, 45, 10));
+        panelCapturas.setBorder(BorderFactory.createLineBorder(
+            new Color(180, 130, 40), 1));
+
+        if (esRojo) panelCapturasJ1 = panelCapturas;
+        else        panelCapturasJ2 = panelCapturas;
+
+        panel.add(panelCapturas);
+
+        return panel;
+    }
+
+    // ================================================================
+    //  REGISTRAR CAPTURA
+    // ================================================================
+    private void registrarCaptura(Pieza pieza, String colorGanador) {
+        String key  = pieza.getColor() + "_" + keyNombre(pieza);
+        ImageIcon icon = cargarIcono(key, 44);
+
+        JLabel lbl = new JLabel(icon != null ? icon : new ImageIcon());
+        lbl.setToolTipText(pieza.getNombre());
+
+        if (colorGanador.equals("rojo")) {
+            panelCapturasJ1.add(lbl);
+            panelCapturasJ1.revalidate();
+            panelCapturasJ1.repaint();
+        } else {
+            panelCapturasJ2.add(lbl);
+            panelCapturasJ2.revalidate();
+            panelCapturasJ2.repaint();
+        }
+    }
+
+    private String keyNombre(Pieza p) {
+        if (p instanceof General)       return "general";
+        if (p instanceof Oficial)       return "oficial";
+        if (p instanceof Elefante)      return "elefante";
+        if (p instanceof Caballo)       return "caballo";
+        if (p instanceof CarroDeGuerra) return "carro";
+        if (p instanceof Canon)         return "canon";
+        return "soldado";
+    }
+
+    private ImageIcon cargarIcono(String key, int size) {
+        try {
+            ImageIcon icon = new ImageIcon("src/images/" + key + ".png");
+            Image scaled = icon.getImage().getScaledInstance(size, size, Image.SCALE_SMOOTH);
+            return new ImageIcon(scaled);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     // ================================================================
@@ -198,5 +276,49 @@ public class JuegoXiangqi {
         frame.dispose();
         new MenuPrincipal(sistema,
             ganadorColor.equals("rojo") ? jugador1 : jugador2);
+    }
+
+    // ================================================================
+    //  WRAPLAYOUT — permite que los iconos hagan wrap automático
+    // ================================================================
+    static class WrapLayout extends FlowLayout {
+        public WrapLayout(int align, int hgap, int vgap) {
+            super(align, hgap, vgap);
+        }
+        @Override
+        public Dimension preferredLayoutSize(Container target) {
+            return layoutSize(target, true);
+        }
+        @Override
+        public Dimension minimumLayoutSize(Container target) {
+            return layoutSize(target, false);
+        }
+        private Dimension layoutSize(Container target, boolean preferred) {
+            synchronized (target.getTreeLock()) {
+                int targetWidth = target.getSize().width;
+                if (targetWidth == 0) targetWidth = Integer.MAX_VALUE;
+                int hgap = getHgap(), vgap = getVgap();
+                Insets insets = target.getInsets();
+                int maxWidth = targetWidth - (insets.left + insets.right + hgap * 2);
+                int width = 0, height = 0, rowWidth = 0, rowHeight = 0;
+                int nmembers = target.getComponentCount();
+                for (int i = 0; i < nmembers; i++) {
+                    Component m = target.getComponent(i);
+                    if (m.isVisible()) {
+                        Dimension d = preferred ? m.getPreferredSize() : m.getMinimumSize();
+                        if (rowWidth + d.width > maxWidth) {
+                            width = Math.max(width, rowWidth);
+                            height += rowHeight + vgap;
+                            rowWidth = 0; rowHeight = 0;
+                        }
+                        rowWidth += d.width + hgap;
+                        rowHeight = Math.max(rowHeight, d.height);
+                    }
+                }
+                width = Math.max(width, rowWidth);
+                height += rowHeight + insets.top + insets.bottom + vgap * 2;
+                return new Dimension(width, height);
+            }
+        }
     }
 }
