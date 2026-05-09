@@ -11,10 +11,19 @@ public class Sistema implements Persistencia {
     private ArrayList<Usuario> usuarios = new ArrayList<>();
 
     // ================================================================
-    //  VALIDACIONES DE MI PASSWORD O DE MI USER
+    //  VALIDACIONES INTERNAS
     // ================================================================
+
+    /** Password: exactamente 5 caracteres, debe tener letras Y números */
     private boolean passwordValido(String password) {
-        return password != null && password.length() == 5;
+        if (password == null || password.length() != 5) return false;
+        boolean tieneLetra  = false;
+        boolean tieneNumero = false;
+        for (char c : password.toCharArray()) {
+            if (Character.isLetter(c))  tieneLetra  = true;
+            if (Character.isDigit(c))   tieneNumero = true;
+        }
+        return tieneLetra && tieneNumero;
     }
 
     private boolean usernameValido(String username) {
@@ -41,12 +50,39 @@ public class Sistema implements Persistencia {
     public Usuario login(String username, String password) {
         for (Usuario u : usuarios) {
             if (u.getUsername().equals(username) &&
-                u.getPassword().equals(password) &&
-                u.isActivo()) {
-                return u;
+                u.getPassword().equals(password)) {
+                return u; // retorna aunque esté inactivo, la GUI maneja eso
             }
         }
         return null;
+    }
+
+    /** Solo busca por username para saber si existe */
+    public Usuario buscarPorUsername(String username) {
+        for (Usuario u : usuarios) {
+            if (u.getUsername().equals(username)) return u;
+        }
+        return null;
+    }
+
+    // ================================================================
+    //  ACTIVAR USUARIO
+    // ================================================================
+    public boolean activarUsuario(Usuario u, String password) {
+        if (u == null) return false;
+        if (!u.getPassword().equals(password)) return false;
+        u.activar();
+        return true;
+    }
+
+    // ================================================================
+    //  DESACTIVAR USUARIO (sin eliminar)
+    // ================================================================
+    public boolean desactivarUsuario(Usuario u, String password) {
+        if (u == null) return false;
+        if (!u.getPassword().equals(password)) return false;
+        u.desactivar();
+        return true;
     }
 
     // ================================================================
@@ -56,7 +92,6 @@ public class Sistema implements Persistencia {
     public boolean eliminarUsuario(Usuario u, String password) {
         if (u == null) return false;
         if (!u.getPassword().equals(password)) return false;
-
         usuarios.remove(u);
         return true;
     }
@@ -69,7 +104,6 @@ public class Sistema implements Persistencia {
         if (u == null)                       return false;
         if (!passwordValido(nuevo))          return false;
         if (!u.getPassword().equals(actual)) return false;
-
         u.setPassword(nuevo);
         return true;
     }
@@ -81,26 +115,23 @@ public class Sistema implements Persistencia {
     public void guardarLogPartida(String usernameGanador, String usernamePerdedor, boolean porRetiro) {
         String mensaje;
         if (porRetiro) {
-            mensaje = usernamePerdedor + " SE HA RETIRADO, FELICIDADES " +
-                      usernameGanador  + ", HAS GANADO 3 PUNTOS";
+            mensaje = usernamePerdedor + " SE RETIRO, " +
+                      usernameGanador  + " GANO 3 PUNTOS";
         } else {
             mensaje = usernameGanador  + " VENCIO A " + usernamePerdedor +
-                      ", FELICIDADES " + usernameGanador + " HAS GANADO 3 PUNTOS";
+                      ", " + usernameGanador + " GANO 3 PUNTOS";
         }
 
-        Usuario ganador  = buscarUsuario(usernameGanador);
-        Usuario perdedor = buscarUsuario(usernamePerdedor);
+        Usuario ganador  = buscarPorUsername(usernameGanador);
+        Usuario perdedor = buscarPorUsername(usernamePerdedor);
 
-        if (ganador  != null) { ganador.agregarPuntos(3); ganador.registrarLogPartida(mensaje);  }
-        if (perdedor != null) { perdedor.registrarLogPartida(mensaje); }
+        if (ganador  != null) { ganador.agregarPuntos(3);  ganador.registrarLogPartida(mensaje);  }
+        if (perdedor != null) {                             perdedor.registrarLogPartida(mensaje); }
     }
 
-    // ================================================================
-    //  OBTENER LOGS 
-    // ================================================================
     @Override
     public ArrayList<String> obtenerLogsUsuario(String username) {
-        Usuario u = buscarUsuario(username);
+        Usuario u = buscarPorUsername(username);
         if (u == null) return new ArrayList<>();
 
         ArrayList<String> resultado = new ArrayList<>();
@@ -112,7 +143,37 @@ public class Sistema implements Persistencia {
     }
 
     // ================================================================
-    //  RANKING 
+    //  VALIDAR PASSWORD (para uso externo con mensajes específicos)
+    //  Recursiva #2 — verifica carácter por carácter
+    // ================================================================
+    public String validarPasswordMensaje(String password) {
+        if (password == null || password.isEmpty())
+            return "El password no puede estar vacío.";
+        if (password.length() != 5)
+            return "El password debe tener exactamente 5 caracteres.";
+        if (!tieneLetra(password, 0))
+            return "El password debe contener al menos una letra.";
+        if (!tieneNumero(password, 0))
+            return "El password debe contener al menos un número.";
+        return null; // null = válido
+    }
+
+    /** Recursiva #2a — verifica si hay al menos una letra */
+    private boolean tieneLetra(String password, int index) {
+        if (index >= password.length()) return false;
+        if (Character.isLetter(password.charAt(index))) return true;
+        return tieneLetra(password, index + 1);
+    }
+
+    /** Recursiva #2b — verifica si hay al menos un número */
+    private boolean tieneNumero(String password, int index) {
+        if (index >= password.length()) return false;
+        if (Character.isDigit(password.charAt(index))) return true;
+        return tieneNumero(password, index + 1);
+    }
+
+    // ================================================================
+    //  RANKING (bubble sort recursivo — recursiva #1)
     // ================================================================
     @Override
     public ArrayList<Usuario> getRankingJugadores() {
@@ -134,7 +195,7 @@ public class Sistema implements Persistencia {
     }
 
     // ================================================================
-    //  PARA MIS WARNINGS
+    //  UTILIDADES
     // ================================================================
     @Override
     public boolean usernameExiste(String username) {
@@ -151,12 +212,5 @@ public class Sistema implements Persistencia {
             if (u.isActivo()) activos.add(u);
         }
         return activos;
-    }
-
-    private Usuario buscarUsuario(String username) {
-        for (Usuario u : usuarios) {
-            if (u.getUsername().equals(username)) return u;
-        }
-        return null;
     }
 }

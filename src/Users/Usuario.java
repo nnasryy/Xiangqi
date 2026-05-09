@@ -12,31 +12,28 @@ public class Usuario {
     private int       puntos;
     private LocalDate fechaIngreso;
     private boolean   activo;
-
-    // Solo logs de PARTIDAS (últimas 10)
     private String[]  logsPartidas;
     private int       logIndex;
 
-    // Constructor normal (nuevo usuario)
     public Usuario(String username, String password) {
-        this.username      = username;
-        this.password      = password;
-        this.puntos        = 0;
-        this.fechaIngreso  = LocalDate.now();
-        this.activo        = true;
-        this.logsPartidas  = new String[10];
-        this.logIndex      = 0;
+        this.username     = username;
+        this.password     = password;
+        this.puntos       = 0;
+        this.fechaIngreso = LocalDate.now();
+        this.activo       = true;
+        this.logsPartidas = new String[10];
+        this.logIndex     = 0;
     }
 
-    // Constructor completo (cargar desde archivo)
-    public Usuario(String username, String password, int puntos, LocalDate fechaIngreso, boolean activo) {
-        this.username      = username;
-        this.password      = password;
-        this.puntos        = puntos;
-        this.fechaIngreso  = fechaIngreso;
-        this.activo        = activo;
-        this.logsPartidas  = new String[10];
-        this.logIndex      = 0;
+    public Usuario(String username, String password, int puntos,
+                   LocalDate fechaIngreso, boolean activo) {
+        this.username     = username;
+        this.password     = password;
+        this.puntos       = puntos;
+        this.fechaIngreso = fechaIngreso;
+        this.activo       = activo;
+        this.logsPartidas = new String[10];
+        this.logIndex     = 0;
     }
 
     // ===== GETTERS =====
@@ -49,17 +46,17 @@ public class Usuario {
     // ===== SETTERS =====
     public void setPassword(String password) { this.password = password; }
     public void desactivar()                 { this.activo   = false;    }
+    public void activar()                    { this.activo   = true;     }
 
     // ===== PUNTOS =====
     public void agregarPuntos(int pts) { puntos += pts; }
 
-    // ===== LOGS DE PARTIDAS ÚNICAMENTE (circulares, últimas 10) =====
+    // ===== LOGS =====
     public void registrarLogPartida(String log) {
         logsPartidas[logIndex] = log;
         logIndex = (logIndex + 1) % 10;
     }
 
-    // Devuelve logs del más viejo al más nuevo
     public String[] getLogsPartidas() {
         String[] resultado = new String[10];
         int k = 0;

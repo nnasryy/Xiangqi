@@ -1,5 +1,6 @@
 package juego;
 
+import GUI.Warning;
 import piezas.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -183,10 +184,20 @@ public class Tablero extends JPanel {
         tablero[fd][cd] = tablero[fi][ci];
         tablero[fi][ci] = null;
 
-        if (capturada != null && onCaptura != null) {
-            onCaptura.accept(capturada, turno); // notificar captura al JuegoXiangqi
+        // Verificar regla de generales enfrentados tras el movimiento
+        if (generalesEnfrentadosEnTablero()) {
+            // Movimiento ilegal — revertir
+            tablero[fi][ci] = tablero[fd][cd];
+            tablero[fd][cd] = capturada;
+            Warning.mensaje(null, "Movimiento ilegal:\nDeja a los Generales\nenfrentados en la misma columna.");
+            repaint();
+            return;
         }
-        if (capturada instanceof General) {
+
+        if (capturada != null && onCaptura != null) {
+            onCaptura.accept(capturada, turno);
+        }
+        if (capturada instanceof piezas.General) {
             juegoActivo = false;
             if (onGanador != null) onGanador.accept(turno);
         } else {
@@ -194,6 +205,39 @@ public class Tablero extends JPanel {
             if (onTurnoChange != null) onTurnoChange.run();
         }
         repaint();
+    }
+
+    /**
+     * Verifica si los dos Generales están en la misma columna sin piezas entre ellos.
+     * Recursiva #3 — recorre la columna entre los dos generales.
+     */
+    private boolean generalesEnfrentadosEnTablero() {
+        int[] posRojo  = buscarGeneral("rojo",  0);
+        int[] posNegro = buscarGeneral("negro", 0);
+        if (posRojo == null || posNegro == null) return false;
+        if (posRojo[1] != posNegro[1]) return false; // distinta columna
+
+        int filaMin = Math.min(posRojo[0], posNegro[0]);
+        int filaMax = Math.max(posRojo[0], posNegro[0]);
+        return !hayPiezaEntreGenerales(posRojo[1], filaMin + 1, filaMax);
+    }
+
+    /** Recursiva #3a — busca el General de un color recorriendo el tablero */
+    private int[] buscarGeneral(String color, int fila) {
+        if (fila >= FILAS) return null;
+        for (int c = 0; c < COLS; c++) {
+            Pieza p = tablero[fila][c];
+            if (p instanceof piezas.General && p.getColor().equals(color))
+                return new int[]{fila, c};
+        }
+        return buscarGeneral(color, fila + 1);
+    }
+
+    /** Recursiva #3b — verifica si hay piezas entre los dos generales */
+    private boolean hayPiezaEntreGenerales(int col, int filaActual, int filaMax) {
+        if (filaActual >= filaMax) return false;
+        if (tablero[filaActual][col] != null) return true;
+        return hayPiezaEntreGenerales(col, filaActual + 1, filaMax);
     }
 
     // ================================================================

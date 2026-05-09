@@ -10,11 +10,11 @@ import javax.swing.border.LineBorder;
 /**
  * @author nasry
  */
-public class Login extends JFrame {
+public class Login {
 
-    JFrame        frame;
+    JFrame         frame;
     JPasswordField passField;
-    JTextField    userField;
+    JTextField     userField;
     private Sistema sistema;
 
     public Login(Sistema sistema) {
@@ -26,27 +26,23 @@ public class Login extends JFrame {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
 
-        // FONDO
         JPanel bg = new JPanel(null);
         bg.setBackground(new Color(218, 100, 0));
         bg.setBounds(0, 0, 600, 500);
         frame.add(bg);
 
-        // PANEL PRINCIPAL
         JPanel panel = new JPanel(null);
         panel.setBackground(new Color(255, 184, 50));
         panel.setBorder(new LineBorder(Color.BLACK, 3));
         panel.setBounds(80, 30, 440, 440);
         bg.add(panel);
 
-        // TITULO
         JLabel title = new JLabel("LOG IN", SwingConstants.CENTER);
         title.setBounds(0, 50, 440, 60);
         title.setFont(new Font("Calisto MT", Font.BOLD, 48));
         title.setForeground(Color.BLACK);
         panel.add(title);
 
-        // USERNAME
         JLabel userLbl = new JLabel("USERNAME:");
         userLbl.setBounds(90, 130, 240, 40);
         userLbl.setFont(new Font("Calisto MT", Font.BOLD, 30));
@@ -59,7 +55,6 @@ public class Login extends JFrame {
         userField.setBorder(new LineBorder(Color.BLACK, 2));
         panel.add(userField);
 
-        // PASSWORD
         JLabel passLbl = new JLabel("PASSWORD:");
         passLbl.setBounds(90, 220, 240, 40);
         passLbl.setFont(new Font("Calisto MT", Font.BOLD, 30));
@@ -72,7 +67,6 @@ public class Login extends JFrame {
         passField.setBorder(new LineBorder(Color.BLACK, 2));
         panel.add(passField);
 
-        // BOTON LOGIN
         JButton loginBtn = new JButton("LOG IN");
         loginBtn.setBounds(130, 320, 160, 60);
         loginBtn.setBackground(new Color(255, 228, 161));
@@ -81,7 +75,6 @@ public class Login extends JFrame {
         loginBtn.setFocusPainted(false);
         panel.add(loginBtn);
 
-        // BOTON SALIR
         JButton exitBtn = new JButton("SALIR");
         exitBtn.setBounds(20, 390, 90, 40);
         exitBtn.setBackground(new Color(153, 0, 0));
@@ -91,25 +84,7 @@ public class Login extends JFrame {
         exitBtn.setFocusPainted(false);
         panel.add(exitBtn);
 
-        // ACCIONES
-        loginBtn.addActionListener(e -> {
-            String user = userField.getText().trim();
-            String pass = new String(passField.getPassword());
-
-            if (user.isEmpty() || pass.isEmpty()) {
-                Warning.mensaje(frame, "Completa todos los campos.");
-                return;
-            }
-
-            Usuario u = sistema.login(user, pass);
-            if (u != null) {
-                Warning.mensaje(frame, "¡Bienvenido " + user + "!");
-                frame.dispose();
-                new MenuPrincipal(sistema, u);
-            } else {
-                Warning.mensaje(frame, "Usuario o contraseña incorrectos.");
-            }
-        });
+        loginBtn.addActionListener(e -> intentarLogin());
 
         exitBtn.addActionListener(e -> {
             frame.dispose();
@@ -117,5 +92,51 @@ public class Login extends JFrame {
         });
 
         frame.setVisible(true);
+    }
+
+    private void intentarLogin() {
+        String user = userField.getText().trim();
+        String pass = new String(passField.getPassword());
+
+        if (user.isEmpty()) {
+            Warning.mensaje(frame, "Ingresa tu username.");
+            return;
+        }
+        if (pass.isEmpty()) {
+            Warning.mensaje(frame, "Ingresa tu password.");
+            return;
+        }
+
+        // Buscar si el usuario existe primero
+        Usuario encontrado = sistema.buscarPorUsername(user);
+
+        if (encontrado == null) {
+            Warning.mensaje(frame, "El usuario \"" + user + "\" no existe.");
+            return;
+        }
+
+        // Verificar password
+        Usuario u = sistema.login(user, pass);
+        if (u == null) {
+            Warning.mensaje(frame, "Password incorrecto.");
+            return;
+        }
+
+        // Verificar si está desactivado
+        if (!u.isActivo()) {
+            boolean reactivar = Warning.confirmar(frame,
+                "La cuenta de \"" + user + "\" está desactivada.\n¿Deseas activarla?");
+            if (reactivar) {
+                sistema.activarUsuario(u, pass);
+                Warning.mensaje(frame, "Cuenta activada. ¡Bienvenido " + user + "!");
+                frame.dispose();
+                new MenuPrincipal(sistema, u);
+            }
+            return;
+        }
+
+        Warning.mensaje(frame, "¡Bienvenido " + user + "!");
+        frame.dispose();
+        new MenuPrincipal(sistema, u);
     }
 }

@@ -9,7 +9,7 @@ import javax.swing.border.LineBorder;
 /**
  * @author nasry
  */
-public class Signup extends JFrame {
+public class Signup {
 
     JFrame         frame;
     JPasswordField passField;
@@ -25,35 +25,30 @@ public class Signup extends JFrame {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
 
-        // FONDO
         JPanel bg = new JPanel(null);
         bg.setBackground(new Color(218, 100, 0));
         bg.setBounds(0, 0, 600, 500);
         frame.add(bg);
 
-        // PANEL PRINCIPAL
         JPanel panel = new JPanel(null);
         panel.setBackground(new Color(255, 184, 50));
         panel.setBorder(new LineBorder(Color.BLACK, 3));
         panel.setBounds(80, 30, 440, 440);
         bg.add(panel);
 
-        // TITULO
         JLabel title = new JLabel("SIGN UP", SwingConstants.CENTER);
         title.setBounds(0, 20, 440, 55);
         title.setFont(new Font("Calisto MT", Font.BOLD, 46));
         title.setForeground(Color.BLACK);
         panel.add(title);
 
-        // HINT
-        JLabel hint = new JLabel("* El password debe tener exactamente 5 caracteres",
+        JLabel hint = new JLabel("* Password: 5 caracteres, letras y números",
                                   SwingConstants.CENTER);
         hint.setBounds(20, 72, 400, 20);
         hint.setFont(new Font("Arial", Font.ITALIC, 11));
         hint.setForeground(new Color(100, 0, 0));
         panel.add(hint);
 
-        // USERNAME
         JLabel userLbl = new JLabel("USERNAME:");
         userLbl.setBounds(90, 105, 240, 40);
         userLbl.setFont(new Font("Calisto MT", Font.BOLD, 30));
@@ -66,7 +61,6 @@ public class Signup extends JFrame {
         userField.setBorder(new LineBorder(Color.BLACK, 2));
         panel.add(userField);
 
-        // PASSWORD
         JLabel passLbl = new JLabel("PASSWORD:");
         passLbl.setBounds(90, 198, 240, 40);
         passLbl.setFont(new Font("Calisto MT", Font.BOLD, 30));
@@ -97,7 +91,6 @@ public class Signup extends JFrame {
             public void changedUpdate(javax.swing.event.DocumentEvent e) { actualizar(); }
         });
 
-        // BOTON SIGN UP
         JButton signupBtn = new JButton("SIGN UP");
         signupBtn.setBounds(130, 295, 160, 60);
         signupBtn.setBackground(new Color(255, 228, 161));
@@ -106,7 +99,6 @@ public class Signup extends JFrame {
         signupBtn.setFocusPainted(false);
         panel.add(signupBtn);
 
-        // BOTON SALIR
         JButton exitBtn = new JButton("SALIR");
         exitBtn.setBounds(20, 390, 90, 40);
         exitBtn.setBackground(new Color(153, 0, 0));
@@ -116,39 +108,42 @@ public class Signup extends JFrame {
         exitBtn.setFocusPainted(false);
         panel.add(exitBtn);
 
-        // ACCIONES
-        signupBtn.addActionListener(e -> {
-            String user = userField.getText().trim();
-            String pass = new String(passField.getPassword());
-
-            if (user.isEmpty()) {
-                Warning.mensaje(frame, "El username no puede estar vacío.");
-                return;
-            }
-            if (pass.length() != 5) {
-                Warning.mensaje(frame, "El password debe tener\nexactamente 5 caracteres.");
-                return;
-            }
-            if (sistema.usernameExiste(user)) {
-                Warning.mensaje(frame, "Ese username ya existe.\nElige otro.");
-                return;
-            }
-
-            boolean ok = sistema.registrar(user, pass);
-            if (ok) {
-                Warning.mensaje(frame, "¡Cuenta creada!\nBienvenido " + user + ".");
-                frame.dispose();
-                new MenuPrincipal(sistema, sistema.login(user, pass));
-            } else {
-                Warning.mensaje(frame, "Error al crear la cuenta.\nIntenta de nuevo.");
-            }
-        });
-
+        signupBtn.addActionListener(e -> intentarRegistro());
         exitBtn.addActionListener(e -> {
             frame.dispose();
             new MenuScreens(sistema);
         });
 
         frame.setVisible(true);
+    }
+
+    private void intentarRegistro() {
+        String user = userField.getText().trim();
+        String pass = new String(passField.getPassword());
+
+        if (user.isEmpty()) {
+            Warning.mensaje(frame, "El username no puede estar vacío.");
+            return;
+        }
+        if (sistema.usernameExiste(user)) {
+            Warning.mensaje(frame, "El username \"" + user + "\" ya existe.\nElige otro.");
+            return;
+        }
+
+        // Validar password con mensaje específico
+        String errorPass = sistema.validarPasswordMensaje(pass);
+        if (errorPass != null) {
+            Warning.mensaje(frame, errorPass);
+            return;
+        }
+
+        boolean ok = sistema.registrar(user, pass);
+        if (ok) {
+            Warning.mensaje(frame, "¡Cuenta creada!\nBienvenido " + user + ".");
+            frame.dispose();
+            new MenuPrincipal(sistema, sistema.login(user, pass));
+        } else {
+            Warning.mensaje(frame, "Error al crear la cuenta.\nIntenta de nuevo.");
+        }
     }
 }
