@@ -34,56 +34,62 @@ public class MiCuenta {
         JPanel panel = new JPanel(null);
         panel.setBackground(new Color(255, 184, 50));
         panel.setBorder(new LineBorder(Color.BLACK, 3));
-        panel.setBounds(60, 20, 480, 460);
+        panel.setBounds(60, 15, 480, 465);
         bg.add(panel);
 
+        // ── Título ──
         JLabel titulo = new JLabel("MI CUENTA", SwingConstants.CENTER);
-        titulo.setBounds(0, 20, 480, 50);
-        titulo.setFont(new Font("Calisto MT", Font.BOLD, 38));
+        titulo.setBounds(0, 15, 480, 45);
+        titulo.setFont(new Font("Calisto MT", Font.BOLD, 36));
         titulo.setForeground(Color.BLACK);
         panel.add(titulo);
 
         JSeparator sep = new JSeparator();
-        sep.setBounds(30, 72, 420, 5);
+        sep.setBounds(25, 62, 430, 4);
         sep.setForeground(Color.BLACK);
         panel.add(sep);
 
-        int y = 85;
-        panel.add(crearFila("USERNAME:",      actual.getUsername(),                    y)); y += 48;
-        panel.add(crearFila("PUNTOS:",        String.valueOf(actual.getPuntos()),       y)); y += 48;
-        panel.add(crearFila("MIEMBRO DESDE:", actual.getFechaIngreso().toString(),      y)); y += 48;
+        // ── Info ──
+        int y = 72;
+        panel.add(crearFila("USERNAME:",      actual.getUsername(),                      y)); y += 44;
+        panel.add(crearFila("PUNTOS:",        String.valueOf(actual.getPuntos()),         y)); y += 44;
+        panel.add(crearFila("MIEMBRO DESDE:", actual.getFechaIngreso().toString(),        y)); y += 44;
         panel.add(crearFila("ESTADO:",        actual.isActivo() ? "Activo" : "Inactivo", y));
 
         JSeparator sep2 = new JSeparator();
-        sep2.setBounds(30, 277, 420, 5);
+        sep2.setBounds(25, 255, 430, 4);
         sep2.setForeground(Color.BLACK);
         panel.add(sep2);
 
-        // CAMBIAR PASSWORD
+        // ── Botones — todos del mismo ancho y alto reducido ──
+        int bx = 70, bw = 340, bh = 38, by = 265, gap = 46;
+
         JButton btnCambiarPass = new JButton("CAMBIAR PASSWORD");
-        btnCambiarPass.setBounds(60, 290, 360, 44);
+        btnCambiarPass.setBounds(bx, by, bw, bh);
         estilo(btnCambiarPass, new Color(180, 100, 0));
         btnCambiarPass.addActionListener(e -> cambiarPassword());
         panel.add(btnCambiarPass);
 
-        // DESACTIVAR / ACTIVAR CUENTA
         String lblDesact = actual.isActivo() ? "DESACTIVAR MI CUENTA" : "ACTIVAR MI CUENTA";
         JButton btnDesactivar = new JButton(lblDesact);
-        btnDesactivar.setBounds(60, 344, 360, 44);
+        btnDesactivar.setBounds(bx, by + gap, bw, bh);
         estilo(btnDesactivar, new Color(120, 60, 0));
         btnDesactivar.addActionListener(e -> toggleActivacion(btnDesactivar));
         panel.add(btnDesactivar);
 
-        // ELIMINAR CUENTA
         JButton btnEliminar = new JButton("ELIMINAR MI CUENTA");
-        btnEliminar.setBounds(60, 398, 360, 44);
+        btnEliminar.setBounds(bx, by + gap * 2, bw, bh);
         estilo(btnEliminar, new Color(153, 0, 0));
         btnEliminar.addActionListener(e -> eliminarCuenta());
         panel.add(btnEliminar);
 
-        // VOLVER
+        JSeparator sep3 = new JSeparator();
+        sep3.setBounds(25, by + gap * 3 + 5, 430, 3);
+        sep3.setForeground(Color.BLACK);
+        panel.add(sep3);
+
         JButton btnVolver = new JButton("VOLVER");
-        btnVolver.setBounds(60, 428, 150, 22);
+        btnVolver.setBounds(bx, by + gap * 3 + 15, bw, bh);
         estilo(btnVolver, new Color(80, 40, 0));
         btnVolver.addActionListener(e -> {
             frame.dispose();
@@ -97,7 +103,7 @@ public class MiCuenta {
     private void estilo(JButton btn, Color fondo) {
         btn.setBackground(fondo);
         btn.setForeground(Color.WHITE);
-        btn.setFont(new Font("Century", Font.BOLD, 15));
+        btn.setFont(new Font("Century", Font.BOLD, 14));
         btn.setBorder(new LineBorder(Color.BLACK, 2));
         btn.setFocusPainted(false);
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -106,16 +112,16 @@ public class MiCuenta {
     private JPanel crearFila(String etiqueta, String valor, int y) {
         JPanel fila = new JPanel(null);
         fila.setOpaque(false);
-        fila.setBounds(30, y, 420, 38);
+        fila.setBounds(25, y, 430, 36);
 
         JLabel lbl = new JLabel(etiqueta);
-        lbl.setBounds(0, 0, 180, 38);
-        lbl.setFont(new Font("Calisto MT", Font.BOLD, 18));
+        lbl.setBounds(0, 0, 180, 36);
+        lbl.setFont(new Font("Calisto MT", Font.BOLD, 17));
         fila.add(lbl);
 
         JLabel val = new JLabel(valor);
-        val.setBounds(190, 0, 230, 38);
-        val.setFont(new Font("Century", Font.PLAIN, 18));
+        val.setBounds(185, 0, 245, 36);
+        val.setFont(new Font("Century", Font.PLAIN, 17));
         val.setForeground(new Color(60, 30, 0));
         fila.add(val);
 
@@ -164,7 +170,6 @@ public class MiCuenta {
 
             if (sistema.desactivarUsuario(actual, pass)) {
                 Warning.mensaje(frame, "Cuenta desactivada.");
-                btn.setText("ACTIVAR MI CUENTA");
                 frame.dispose();
                 new MenuScreens(sistema);
             } else {
@@ -199,7 +204,7 @@ public class MiCuenta {
             frame.dispose();
             new MenuScreens(sistema);
         } else {
-            Warning.mensaje(frame, "Password incorrecto.\nNo se eliminó la cuenta.");
+            Warning.mensaje(frame, "Password incorrecto.");
         }
     }
 }

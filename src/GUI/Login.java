@@ -95,6 +95,7 @@ public class Login {
     }
 
     private void intentarLogin() {
+        try {
         String user = userField.getText().trim();
         String pass = new String(passField.getPassword());
 
@@ -135,8 +136,12 @@ public class Login {
             return;
         }
 
-        Warning.mensaje(frame, "¡Bienvenido " + user + "!");
-        frame.dispose();
-        new MenuPrincipal(sistema, u);
+            Warning.mensaje(frame, "¡Bienvenido " + user + "!");
+            frame.dispose();
+            new MenuPrincipal(sistema, u);
+        } catch (Exception ex) {
+            Warning.mensaje(frame, "Error inesperado al iniciar sesión.");
+            System.err.println("Error login: " + ex.getMessage());
+        }
     }
 }

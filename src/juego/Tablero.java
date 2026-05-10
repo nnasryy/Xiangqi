@@ -20,7 +20,7 @@ public class Tablero extends JPanel {
     private static final int FILAS      = 10;
     private static final int COLS       = 9;
     private static final int CELDA      = 60;   // tamaño de cada casilla
-    private static final int MARGEN     = 2;
+    private static final int MARGEN     = 25; // espacio para letras/números
     private static final int ICON_SIZE  = 52;   // tamaño de la imagen de pieza
 
     private Pieza[][]   tablero            = new Pieza[FILAS][COLS];
@@ -40,10 +40,10 @@ public class Tablero extends JPanel {
     //  CONSTRUCTOR
     // ================================================================
     public Tablero() {
-        int ancho = MARGEN * 2 + CELDA * COLS;
-        int alto  = MARGEN * 2 + CELDA * FILAS;
+        int ancho = MARGEN + CELDA * COLS + 10;
+        int alto  = MARGEN + CELDA * FILAS + 25; // 25 extra abajo para letras
         setPreferredSize(new Dimension(ancho, alto));
-        setBackground(new Color(200, 200, 200));
+        setBackground(new Color(139, 90, 43));
 
         cargarImagenes();
         inicializarPiezas();
@@ -64,12 +64,16 @@ public class Tablero extends JPanel {
         String[] colores = {"rojo","negro"};
         for (String color : colores) {
             for (String nombre : nombres) {
-                String key  = color + "_" + nombre;
-                String path = "src/images/" + key + ".png";
-                ImageIcon icon = new ImageIcon(path);
-                Image scaled = icon.getImage().getScaledInstance(
-                    ICON_SIZE, ICON_SIZE, Image.SCALE_SMOOTH);
-                imagenes.put(key, new ImageIcon(scaled));
+                try {
+                    String key  = color + "_" + nombre;
+                    String path = "src/images/" + key + ".png";
+                    ImageIcon icon = new ImageIcon(path);
+                    Image scaled = icon.getImage().getScaledInstance(
+                        ICON_SIZE, ICON_SIZE, Image.SCALE_SMOOTH);
+                    imagenes.put(key, new ImageIcon(scaled));
+                } catch (Exception e) {
+                    System.err.println("No se pudo cargar imagen: " + color + "_" + nombre);
+                }
             }
         }
     }
@@ -257,11 +261,11 @@ public class Tablero extends JPanel {
     }
 
     // ================================================================
-    //  CASILLAS ALTERNADAS
+    //  CASILLAS ALTERNADAS + LETRAS Y NÚMEROS
     // ================================================================
     private void dibujarCasillas(Graphics2D g2) {
-        Color claro  = new Color(240, 217, 181); // beige claro
-        Color oscuro = new Color(204, 158, 59);  // dorado
+        Color claro  = new Color(240, 217, 181);
+        Color oscuro = new Color(204, 158, 59);
 
         for (int f = 0; f < FILAS; f++) {
             for (int c = 0; c < COLS; c++) {
@@ -270,6 +274,26 @@ public class Tablero extends JPanel {
                 g2.setColor((f + c) % 2 == 0 ? claro : oscuro);
                 g2.fillRect(x, y, CELDA, CELDA);
             }
+        }
+
+        // Letras horizontales (a-i) debajo del tablero
+        g2.setFont(new Font("Century", Font.BOLD, 13));
+        g2.setColor(new Color(255, 230, 150));
+        String letras = "abcdefghi";
+        for (int c = 0; c < COLS; c++) {
+            int x = MARGEN + c * CELDA + CELDA / 2;
+            int y = MARGEN + FILAS * CELDA + 18;
+            FontMetrics fm = g2.getFontMetrics();
+            String letra = String.valueOf(letras.charAt(c));
+            g2.drawString(letra, x - fm.stringWidth(letra) / 2, y);
+        }
+
+        // Números verticales (10-1) a la izquierda del tablero
+        for (int f = 0; f < FILAS; f++) {
+            int x = 5;
+            int y = MARGEN + f * CELDA + CELDA / 2 + 5;
+            String num = String.valueOf(FILAS - f);
+            g2.drawString(num, x, y);
         }
     }
 

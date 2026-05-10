@@ -63,30 +63,39 @@ public class JuegoXiangqi {
     }
 
     // ================================================================
-    //  PANEL NORTE — título + turno
+    //  PANEL NORTE — título + turno centrados
     // ================================================================
     private JPanel crearPanelNorte() {
-        JPanel panel = new JPanel(null);
+        JPanel panel = new JPanel(new GridBagLayout());
         panel.setPreferredSize(new Dimension(800, 90));
         panel.setBackground(new Color(60, 30, 5));
 
+        JPanel inner = new JPanel(null);
+        inner.setOpaque(false);
+        inner.setPreferredSize(new Dimension(500, 80));
+
         JLabel titulo = new JLabel("XIANGQI", SwingConstants.CENTER);
-        titulo.setBounds(0, 8, 800, 40);
-        titulo.setFont(new Font("Serif", Font.BOLD, 32));
+        titulo.setBounds(0, 5, 500, 40);
+        titulo.setFont(new Font("Serif", Font.BOLD, 34));
         titulo.setForeground(new Color(255, 210, 80));
-        panel.add(titulo);
+        inner.add(titulo);
 
-        JLabel lblTurnoLabel = new JLabel("TURNO:", SwingConstants.CENTER);
-        lblTurnoLabel.setBounds(290, 52, 80, 28);
-        lblTurnoLabel.setFont(new Font("Century", Font.BOLD, 14));
+        JPanel turnoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 8, 0));
+        turnoPanel.setOpaque(false);
+        turnoPanel.setBounds(0, 48, 500, 30);
+
+        JLabel lblTurnoLabel = new JLabel("TURNO:");
+        lblTurnoLabel.setFont(new Font("Century", Font.BOLD, 16));
         lblTurnoLabel.setForeground(Color.LIGHT_GRAY);
-        panel.add(lblTurnoLabel);
+        turnoPanel.add(lblTurnoLabel);
 
-        lblTurno = new JLabel(jugador1.getUsername(), SwingConstants.LEFT);
-        lblTurno.setBounds(375, 50, 200, 32);
+        lblTurno = new JLabel(jugador1.getUsername());
         lblTurno.setFont(new Font("Century", Font.BOLD, 22));
         lblTurno.setForeground(new Color(220, 80, 80));
-        panel.add(lblTurno);
+        turnoPanel.add(lblTurno);
+
+        inner.add(turnoPanel);
+        panel.add(inner);
 
         return panel;
     }
