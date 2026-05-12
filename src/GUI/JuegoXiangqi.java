@@ -11,7 +11,7 @@ import javax.swing.*;
 /**
  * @author nasry
  */
-public class JuegoXiangqi {
+public class JuegoXiangqi extends juego.Juego {
 
     private JFrame  frame;
     private Sistema sistema;
@@ -24,9 +24,7 @@ public class JuegoXiangqi {
     private JPanel panelCapturasJ2;
 
     public JuegoXiangqi(Sistema sistema, Usuario jugador1, Usuario jugador2) {
-        this.sistema  = sistema;
-        this.jugador1 = jugador1;
-        this.jugador2 = jugador2;
+        super(sistema, jugador1, jugador2);
 
         frame = new JFrame("Xiangqi — " + jugador1.getUsername() +
                            " vs " + jugador2.getUsername());
@@ -269,16 +267,10 @@ public class JuegoXiangqi {
         String usernamePerdedor = ganadorColor.equals("rojo")
             ? jugador2.getUsername() : jugador1.getUsername();
 
-        sistema.guardarLogPartida(usernameGanador, usernamePerdedor, porRetiro);
+        registrarResultado(usernameGanador, usernamePerdedor, porRetiro);
 
-        String mensaje;
-        if (porRetiro) {
-            mensaje = quienSeRetiro + " SE HA RETIRADO\n" +
-                      "FELICIDADES " + usernameGanador + ", HAS GANADO 3 PUNTOS";
-        } else {
-            mensaje = usernameGanador + " VENCIO A " + usernamePerdedor + "\n" +
-                      "FELICIDADES " + usernameGanador + " HAS GANADO 3 PUNTOS";
-        }
+        String mensaje = construirMensajeFin(usernameGanador, usernamePerdedor,
+                                              porRetiro, quienSeRetiro);
 
         Warning.mensaje(frame, mensaje);
 

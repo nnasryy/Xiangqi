@@ -3,6 +3,7 @@ package GUI;
 import Users.Usuario;
 import almacenamiento.Sistema;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -61,11 +62,31 @@ public class Login {
         panel.add(passLbl);
 
         passField = new JPasswordField();
-        passField.setBounds(90, 260, 270, 40);
+        passField.setBounds(90, 260, 230, 40);
         passField.setBackground(new Color(255, 215, 114));
         passField.setFont(new Font("Century", Font.PLAIN, 20));
         passField.setBorder(new LineBorder(Color.BLACK, 2));
+        passField.setEchoChar('●');
         panel.add(passField);
+
+        // Botón ojo
+        JButton btnOjoL = new JButton("👁");
+        btnOjoL.setBounds(325, 260, 38, 40);
+        btnOjoL.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 14));
+        btnOjoL.setBackground(new Color(255, 215, 114));
+        btnOjoL.setBorder(new LineBorder(Color.BLACK, 2));
+        btnOjoL.setFocusPainted(false);
+        btnOjoL.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnOjoL.addActionListener(e -> {
+            if (passField.getEchoChar() == '●') {
+                passField.setEchoChar((char) 0);
+                btnOjoL.setText("🙈");
+            } else {
+                passField.setEchoChar('●');
+                btnOjoL.setText("👁");
+            }
+        });
+        panel.add(btnOjoL);
 
         JButton loginBtn = new JButton("LOG IN");
         loginBtn.setBounds(130, 320, 160, 60);

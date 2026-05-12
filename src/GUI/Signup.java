@@ -2,6 +2,7 @@ package GUI;
 
 import almacenamiento.Sistema;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -67,11 +68,31 @@ public class Signup {
         panel.add(passLbl);
 
         passField = new JPasswordField();
-        passField.setBounds(90, 238, 270, 40);
+        passField.setBounds(90, 238, 230, 40);
         passField.setBackground(new Color(255, 215, 114));
         passField.setFont(new Font("Century", Font.PLAIN, 20));
         passField.setBorder(new LineBorder(Color.BLACK, 2));
+        passField.setEchoChar('●');
         panel.add(passField);
+
+        // Botón ojo
+        JButton btnOjoS = new JButton("👁");
+        btnOjoS.setBounds(325, 238, 38, 40);
+        btnOjoS.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 14));
+        btnOjoS.setBackground(new Color(255, 215, 114));
+        btnOjoS.setBorder(new LineBorder(Color.BLACK, 2));
+        btnOjoS.setFocusPainted(false);
+        btnOjoS.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnOjoS.addActionListener(e -> {
+            if (passField.getEchoChar() == '●') {
+                passField.setEchoChar((char) 0);
+                btnOjoS.setText("🙈");
+            } else {
+                passField.setEchoChar('●');
+                btnOjoS.setText("👁");
+            }
+        });
+        panel.add(btnOjoS);
 
         // Contador de caracteres
         JLabel contador = new JLabel("0/5", SwingConstants.CENTER);
@@ -118,6 +139,7 @@ public class Signup {
     }
 
     private void intentarRegistro() {
+        try {
         String user = userField.getText().trim();
         String pass = new String(passField.getPassword());
 
@@ -144,6 +166,10 @@ public class Signup {
             new MenuPrincipal(sistema, sistema.login(user, pass));
         } else {
             Warning.mensaje(frame, "Error al crear la cuenta.\nIntenta de nuevo.");
+        }
+        } catch (Exception ex) {
+            Warning.mensaje(frame, "Error inesperado al registrar.");
+            System.err.println("Error signup: " + ex.getMessage());
         }
     }
 }

@@ -62,7 +62,7 @@ public class MenuPrincipal {
 
         // REPORTES
         JButton reportes = new JButton();
-        reportes.setBounds(410, 190, 180, 170);
+        reportes.setBounds(404, 190, 180, 170);
         reportes.setBorderPainted(false);
         reportes.setContentAreaFilled(false);
         reportes.setFocusPainted(false);
