@@ -14,9 +14,6 @@ import javax.swing.*;
 public class JuegoXiangqi extends juego.Juego {
 
     private JFrame  frame;
-    private Sistema sistema;
-    private Usuario jugador1;  // rojo  — izquierda
-    private Usuario jugador2;  // negro — derecha
     private Tablero tablero;
     private JLabel  lblTurno;
 
@@ -26,8 +23,8 @@ public class JuegoXiangqi extends juego.Juego {
     public JuegoXiangqi(Sistema sistema, Usuario jugador1, Usuario jugador2) {
         super(sistema, jugador1, jugador2);
 
-        frame = new JFrame("Xiangqi — " + jugador1.getUsername() +
-                           " vs " + jugador2.getUsername());
+        frame = new JFrame("Xiangqi — " + getJugador1().getUsername() +
+                           " vs " + getJugador2().getUsername());
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.setResizable(false);
         frame.setLayout(new BorderLayout());
@@ -43,10 +40,10 @@ public class JuegoXiangqi extends juego.Juego {
         frame.add(wrapTablero, BorderLayout.CENTER);
 
         // ── Izquierda: jugador 1 (rojo) ──
-        frame.add(crearPanelJugador(jugador1, "rojo", true),  BorderLayout.WEST);
+        frame.add(crearPanelJugador(getJugador1(), "rojo", true),  BorderLayout.WEST);
 
         // ── Derecha: jugador 2 (negro) ──
-        frame.add(crearPanelJugador(jugador2, "negro", false), BorderLayout.EAST);
+        frame.add(crearPanelJugador(getJugador2(), "negro", false), BorderLayout.EAST);
 
         // ── Sur: botón retirar ──
         frame.add(crearPanelSur(), BorderLayout.SOUTH);
@@ -87,7 +84,7 @@ public class JuegoXiangqi extends juego.Juego {
         lblTurnoLabel.setForeground(Color.LIGHT_GRAY);
         turnoPanel.add(lblTurnoLabel);
 
-        lblTurno = new JLabel(jugador1.getUsername());
+        lblTurno = new JLabel(getJugador1().getUsername());
         lblTurno.setFont(new Font("Century", Font.BOLD, 22));
         lblTurno.setForeground(new Color(220, 80, 80));
         turnoPanel.add(lblTurno);
@@ -220,10 +217,10 @@ public class JuegoXiangqi extends juego.Juego {
     // ================================================================
     private void actualizarTurno() {
         if (tablero.getTurno().equals("rojo")) {
-            lblTurno.setText(jugador1.getUsername());
+            lblTurno.setText(getJugador1().getUsername());
             lblTurno.setForeground(new Color(220, 80, 80));
         } else {
-            lblTurno.setText(jugador2.getUsername());
+            lblTurno.setText(getJugador2().getUsername());
             lblTurno.setForeground(new Color(180, 180, 180));
         }
     }
@@ -233,8 +230,8 @@ public class JuegoXiangqi extends juego.Juego {
     // ================================================================
     private void confirmarRetiro() {
         String quienRetira = tablero.getTurno().equals("rojo")
-            ? jugador1.getUsername()
-            : jugador2.getUsername();
+            ? getJugador1().getUsername()
+            : getJugador2().getUsername();
 
         boolean ok = Warning.confirmar(frame,
             "¿Seguro que " + quienRetira + " desea retirarse?");
@@ -255,17 +252,17 @@ public class JuegoXiangqi extends juego.Juego {
             ganadorColor  = partes[0];
             porRetiro     = true;
             quienSeRetiro = partes[2].equals("rojo")
-                ? jugador1.getUsername()
-                : jugador2.getUsername();
+                ? getJugador1().getUsername()
+                : getJugador2().getUsername();
         } else {
             ganadorColor = info;
             porRetiro    = false;
         }
 
         String usernameGanador  = ganadorColor.equals("rojo")
-            ? jugador1.getUsername() : jugador2.getUsername();
+            ? getJugador1().getUsername() : getJugador2().getUsername();
         String usernamePerdedor = ganadorColor.equals("rojo")
-            ? jugador2.getUsername() : jugador1.getUsername();
+            ? getJugador2().getUsername() : getJugador1().getUsername();
 
         registrarResultado(usernameGanador, usernamePerdedor, porRetiro);
 
@@ -276,7 +273,7 @@ public class JuegoXiangqi extends juego.Juego {
 
         frame.dispose();
         new MenuPrincipal(sistema,
-            ganadorColor.equals("rojo") ? jugador1 : jugador2);
+            ganadorColor.equals("rojo") ? getJugador1() : getJugador2());
     }
 
     // ================================================================
