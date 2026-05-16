@@ -69,7 +69,7 @@ public class Login {
         passField.setEchoChar('●');
         panel.add(passField);
 
-        // Botón ojo
+   
         JButton btnOjoL = new JButton("👁");
         btnOjoL.setBounds(325, 260, 38, 40);
         btnOjoL.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 14));
@@ -129,7 +129,6 @@ public class Login {
             return;
         }
 
-        // Buscar si el usuario existe primero
         Usuario encontrado = sistema.buscarPorUsername(user);
 
         if (encontrado == null) {
@@ -137,14 +136,12 @@ public class Login {
             return;
         }
 
-        // Verificar password
         Usuario u = sistema.login(user, pass);
         if (u == null) {
             Warning.mensaje(frame, "Password incorrecto.");
             return;
         }
 
-        // Verificar si está desactivado
         if (!u.isActivo()) {
             boolean reactivar = Warning.confirmar(frame,
                 "La cuenta de \"" + user + "\" está desactivada.\n¿Deseas activarla?");

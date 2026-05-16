@@ -10,11 +10,7 @@ public class Sistema implements Persistencia {
 
     private ArrayList<Usuario> usuarios = new ArrayList<>();
 
-    // ================================================================
-    //  VALIDACIONES INTERNAS
-    // ================================================================
-
-    /** Password: exactamente 5 caracteres, debe tener letras Y números */
+    
     private boolean passwordValido(String password) {
         if (password == null || password.length() != 5) return false;
         boolean tieneLetra  = false;
@@ -30,9 +26,7 @@ public class Sistema implements Persistencia {
         return username != null && !username.trim().isEmpty();
     }
 
-    // ================================================================
-    //  REGISTRAR
-    // ================================================================
+   
     @Override
     public boolean registrar(String username, String password) {
         if (!usernameValido(username)) return false;
@@ -43,21 +37,19 @@ public class Sistema implements Persistencia {
         return true;
     }
 
-    // ================================================================
-    //  LOGIN
-    // ================================================================
+   
     @Override
     public Usuario login(String username, String password) {
         for (Usuario u : usuarios) {
             if (u.getUsername().equals(username) &&
                 u.getPassword().equals(password)) {
-                return u; // retorna aunque esté inactivo, la GUI maneja eso
+                return u; 
             }
         }
         return null;
     }
 
-    /** Solo busca por username para saber si existe */
+   
     public Usuario buscarPorUsername(String username) {
         for (Usuario u : usuarios) {
             if (u.getUsername().equals(username)) return u;
@@ -65,9 +57,7 @@ public class Sistema implements Persistencia {
         return null;
     }
 
-    // ================================================================
-    //  ACTIVAR USUARIO
-    // ================================================================
+    
     public boolean activarUsuario(Usuario u, String password) {
         if (u == null) return false;
         if (!u.getPassword().equals(password)) return false;
@@ -75,9 +65,7 @@ public class Sistema implements Persistencia {
         return true;
     }
 
-    // ================================================================
-    //  DESACTIVAR USUARIO (sin eliminar)
-    // ================================================================
+    
     public boolean desactivarUsuario(Usuario u, String password) {
         if (u == null) return false;
         if (!u.getPassword().equals(password)) return false;
@@ -85,9 +73,7 @@ public class Sistema implements Persistencia {
         return true;
     }
 
-    // ================================================================
-    //  ELIMINAR USUARIO
-    // ================================================================
+    
     @Override
     public boolean eliminarUsuario(Usuario u, String password) {
         if (u == null) return false;
@@ -96,9 +82,7 @@ public class Sistema implements Persistencia {
         return true;
     }
 
-    // ================================================================
-    //  CAMBIAR PASSWORD
-    // ================================================================
+    
     @Override
     public boolean cambiarPassword(Usuario u, String actual, String nuevo) {
         if (u == null)                       return false;
@@ -108,9 +92,7 @@ public class Sistema implements Persistencia {
         return true;
     }
 
-    // ================================================================
-    //  LOGS DE PARTIDAS
-    // ================================================================
+    
     @Override
     public void guardarLogPartida(String usernameGanador, String usernamePerdedor, boolean porRetiro) {
         String mensaje;
@@ -142,10 +124,7 @@ public class Sistema implements Persistencia {
         return resultado;
     }
 
-    // ================================================================
-    //  VALIDAR PASSWORD (para uso externo con mensajes específicos)
-    //  Recursiva #2 — verifica carácter por carácter
-    // ================================================================
+    
     public String validarPasswordMensaje(String password) {
         if (password == null || password.isEmpty())
             return "El password no puede estar vacío.";
@@ -155,26 +134,24 @@ public class Sistema implements Persistencia {
             return "El password debe contener al menos una letra.";
         if (!tieneNumero(password, 0))
             return "El password debe contener al menos un número.";
-        return null; // null = válido
+        return null; 
     }
 
-    /** Recursiva #2a — verifica si hay al menos una letra */
+    
     private boolean tieneLetra(String password, int index) {
         if (index >= password.length()) return false;
         if (Character.isLetter(password.charAt(index))) return true;
         return tieneLetra(password, index + 1);
     }
 
-    /** Recursiva #2b — verifica si hay al menos un número */
+
     private boolean tieneNumero(String password, int index) {
         if (index >= password.length()) return false;
         if (Character.isDigit(password.charAt(index))) return true;
         return tieneNumero(password, index + 1);
     }
 
-    // ================================================================
-    //  RANKING (bubble sort recursivo — recursiva #1)
-    // ================================================================
+ 
     @Override
     public ArrayList<Usuario> getRankingJugadores() {
         ArrayList<Usuario> activos = getUsuariosActivos();
@@ -194,9 +171,7 @@ public class Sistema implements Persistencia {
         ordenarPorPuntos(lista, n - 1);
     }
 
-    // ================================================================
-    //  UTILIDADES
-    // ================================================================
+  
     @Override
     public boolean usernameExiste(String username) {
         for (Usuario u : usuarios) {

@@ -15,14 +15,8 @@ public abstract class Pieza {
         this.nombre = nombre;
     }
 
-    // ================================================================
-    //  MÉTODO ABSTRACTO — cada subclase DEBE implementar sus movimientos
-    // ================================================================
     public abstract int[][] movimientosValidos(int fila, int col, Pieza[][] tablero);
 
-    // ================================================================
-    //  MÉTODO FINAL — nadie puede sobreescribirlo
-    // ================================================================
     public final boolean esMovimientoValido(int filaOrigen, int colOrigen,
                                              int filaDestino, int colDestino,
                                              Pieza[][] tablero) {
@@ -33,15 +27,9 @@ public abstract class Pieza {
         return false;
     }
 
-    // ================================================================
-    //  GETTERS
-    // ================================================================
     public String getColor()  { return color;  }
     public String getNombre() { return nombre; }
 
-    // ================================================================
-    //  UTILIDADES PROTEGIDAS
-    // ================================================================
     protected boolean enTablero(int fila, int col) {
         return fila >= 0 && fila < 10 && col >= 0 && col < 9;
     }

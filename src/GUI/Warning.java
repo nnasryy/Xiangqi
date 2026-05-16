@@ -44,9 +44,7 @@ public class Warning extends JDialog {
         setVisible(true);
     }
 
-    // ================================================================
-    //  MENSAJE
-    // ================================================================
+   
     private void construirMensaje(JLabel bg, JLabel lblMensaje) {
         lblMensaje.setBounds(40, 80, 520, 100);
         bg.add(lblMensaje);
@@ -57,9 +55,7 @@ public class Warning extends JDialog {
         bg.add(btnOk);
     }
 
-    // ================================================================
-    //  CONFIRMAR — texto más arriba, botones más pequeños
-    // ================================================================
+    
     private void construirConfirmar(JLabel bg, JLabel lblMensaje) {
         lblMensaje.setBounds(40, 80, 520, 110);
         bg.add(lblMensaje);
@@ -75,15 +71,13 @@ public class Warning extends JDialog {
         bg.add(btnNo);
     }
 
-    // ================================================================
-    //  PASSWORD — texto abajo del título, botón ojo siempre visible
-    // ================================================================
+    
     private void construirPassword(JLabel bg, JLabel lblMensaje, String mensaje) {
-        // Texto del mensaje más abajo
+     
         lblMensaje.setBounds(40, 70, 520, 55);
         bg.add(lblMensaje);
 
-        // Campo password
+    
         JPasswordField passField = new JPasswordField();
         passField.setBounds(110, 125, 310, 40);
         passField.setBackground(new Color(255, 215, 114));
@@ -93,7 +87,7 @@ public class Warning extends JDialog {
         passField.setEchoChar('●');
         bg.add(passField);
 
-        // Botón ojo — siempre visible
+        
         JButton btnOjo = new JButton("👁");
         btnOjo.setBounds(425, 125, 42, 40);
         btnOjo.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 15));
@@ -112,7 +106,7 @@ public class Warning extends JDialog {
         });
         bg.add(btnOjo);
 
-        // Hint solo para password nuevo
+      
         JLabel hint = new JLabel("* 5 caracteres: letras y números", SwingConstants.CENTER);
         hint.setBounds(110, 168, 357, 18);
         hint.setFont(new Font("Century", Font.ITALIC, 11));
@@ -136,9 +130,7 @@ public class Warning extends JDialog {
         bg.add(btnCancelar);
     }
 
-    // ================================================================
-    //  BOTONES
-    // ================================================================
+    
     private JButton crearBoton(String texto, Color fondo) {
         JButton btn = new JButton(texto);
         btn.setFont(new Font("Century", Font.BOLD, 16));

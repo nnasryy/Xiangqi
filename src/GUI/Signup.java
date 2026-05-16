@@ -75,7 +75,7 @@ public class Signup {
         passField.setEchoChar('●');
         panel.add(passField);
 
-        // Botón ojo
+
         JButton btnOjoS = new JButton("👁");
         btnOjoS.setBounds(325, 238, 38, 40);
         btnOjoS.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 14));
@@ -94,7 +94,7 @@ public class Signup {
         });
         panel.add(btnOjoS);
 
-        // Contador de caracteres
+   
         JLabel contador = new JLabel("0/5", SwingConstants.CENTER);
         contador.setBounds(368, 238, 50, 40);
         contador.setFont(new Font("Arial", Font.BOLD, 14));
@@ -152,7 +152,6 @@ public class Signup {
             return;
         }
 
-        // Validar password con mensaje específico
         String errorPass = sistema.validarPasswordMensaje(pass);
         if (errorPass != null) {
             Warning.mensaje(frame, errorPass);

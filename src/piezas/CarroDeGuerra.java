@@ -6,9 +6,7 @@ package piezas;
 
 import java.util.ArrayList;
 
-/**
- * Se mueve como la torre del ajedrez: horizontal o vertical sin límite.
- * No puede saltar piezas.
+/*
  * @author nasry
  */
 public class CarroDeGuerra extends Pieza {

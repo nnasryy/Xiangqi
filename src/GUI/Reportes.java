@@ -31,27 +31,27 @@ public class Reportes {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
 
-        // ── Fondo ──
+
         JPanel bg = new JPanel(null);
         bg.setBackground(new Color(218, 100, 0));
         bg.setBounds(0, 0, 600, 500);
         frame.add(bg);
 
-        // ── Panel principal ──
+
         JPanel panel = new JPanel(null);
         panel.setBackground(new Color(255, 184, 50));
         panel.setBorder(new LineBorder(Color.BLACK, 3));
         panel.setBounds(30, 15, 540, 460);
         bg.add(panel);
 
-        // ── Título ──
+
         JLabel titulo = new JLabel("REPORTES", SwingConstants.CENTER);
         titulo.setBounds(0, 15, 540, 45);
         titulo.setFont(new Font("Calisto MT", Font.BOLD, 36));
         titulo.setForeground(Color.BLACK);
         panel.add(titulo);
 
-        // ── Tabs ──
+    
         JTabbedPane tabs = new JTabbedPane();
         tabs.setBounds(15, 68, 510, 340);
         tabs.setFont(new Font("Century", Font.BOLD, 14));
@@ -60,7 +60,7 @@ public class Reportes {
         tabs.addTab("Mis Últimos Partidos", crearTabLogs());
         panel.add(tabs);
 
-        // ── Botón VOLVER ──
+
         JButton btnVolver = new JButton("VOLVER");
         btnVolver.setBounds(190, 418, 160, 35);
         btnVolver.setBackground(new Color(80, 40, 0));
@@ -78,14 +78,11 @@ public class Reportes {
         frame.setVisible(true);
     }
 
-    // ================================================================
-    //  TAB 1 — RANKING DE JUGADORES
-    // ================================================================
     private JPanel crearTabRanking() {
         JPanel tab = new JPanel(null);
         tab.setBackground(new Color(255, 215, 114));
 
-        // Encabezado
+
         String[] cols   = {"#", "USERNAME", "PUNTOS"};
         int[]    anchos = {40, 280, 130};
         int x = 10;
@@ -101,7 +98,7 @@ public class Reportes {
             x += anchos[i];
         }
 
-        // Filas
+ 
         ArrayList<Usuario> ranking = sistema.getRankingJugadores();
 
         JPanel filas = new JPanel(null);
@@ -146,9 +143,6 @@ public class Reportes {
         panel.add(lbl);
     }
 
-    // ================================================================
-    //  TAB 2 — MIS ÚLTIMOS PARTIDOS
-    // ================================================================
     private JPanel crearTabLogs() {
         JPanel tab = new JPanel(null);
         tab.setBackground(new Color(255, 215, 114));

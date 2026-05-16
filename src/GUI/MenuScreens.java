@@ -25,17 +25,13 @@ public class MenuScreens {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
 
-        // =========================
-        // FONDO 
-        // =========================
+   
         JLabel bg = new JLabel(new ImageIcon("src/images/XIANGQI.png"));
         bg.setLayout(null);
         bg.setBounds(0, 0, 600, 500);
         frame.add(bg);
 
-        // =========================
-        // BOTON SIGN UP
-        // =========================
+
         JButton btnSignUp = new JButton();
         btnSignUp.setBounds(120, 242, 170, 160);
         btnSignUp.setBorderPainted(false);
@@ -48,9 +44,7 @@ public class MenuScreens {
         });
         bg.add(btnSignUp);
 
-        // =========================
-        // BOTON LOGIN
-        // =========================
+
         JButton btnLogin = new JButton();
         btnLogin.setBounds(310, 242, 170, 160);
         btnLogin.setBorderPainted(false);
@@ -64,9 +58,6 @@ public class MenuScreens {
 
         bg.add(btnLogin);
 
-        // =========================
-        // BOTON SALIR
-        // =========================
         JButton btnSalir = new JButton();
         btnSalir.setBounds(50, 410, 140, 60);
         btnSalir.setBorderPainted(false);
@@ -78,9 +69,6 @@ public class MenuScreens {
         frame.setVisible(true);
     }
 
-    // =========================
-    // HOVER EFFECT
-    // =========================
     private void efectoHover(JButton btn, String normalPath, String hoverPath) {
         ImageIcon normal = new ImageIcon(normalPath);
         ImageIcon hover = new ImageIcon(hoverPath);

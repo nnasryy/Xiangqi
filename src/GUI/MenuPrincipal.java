@@ -28,13 +28,13 @@ public class MenuPrincipal {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
 
-        // FONDO
+
         JLabel bg = new JLabel(new ImageIcon("src/images/MeunPrincipal.png"));
         bg.setLayout(null);
         bg.setBounds(0, 0, 600, 500);
         frame.add(bg);
 
-        // JUGAR XIANGQI
+
         JButton jugar = new JButton();
         jugar.setBounds(10, 190, 180, 170);
         jugar.setBorderPainted(false);
@@ -47,7 +47,7 @@ public class MenuPrincipal {
         });
         bg.add(jugar);
 
-        // MI CUENTA
+    
         JButton miCuenta = new JButton();
         miCuenta.setBounds(210, 190, 180, 170);
         miCuenta.setBorderPainted(false);
@@ -60,7 +60,7 @@ public class MenuPrincipal {
         });
         bg.add(miCuenta);
 
-        // REPORTES
+      
         JButton reportes = new JButton();
         reportes.setBounds(404, 190, 180, 170);
         reportes.setBorderPainted(false);
@@ -73,7 +73,7 @@ public class MenuPrincipal {
         });
         bg.add(reportes);
 
-        // SALIR (logout → regresa al menú de inicio)
+ 
         JButton salir = new JButton();
         salir.setBounds(210, 370, 180, 100);
         salir.setBorderPainted(false);

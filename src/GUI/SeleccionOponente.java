@@ -31,20 +31,20 @@ public class SeleccionOponente extends JFrame {
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.setResizable(false);
 
-        // ── Fondo ──
+
         JPanel bg = new JPanel(null);
         bg.setBackground(new Color(218, 100, 0));
         bg.setBounds(0, 0, 400, 470);
         frame.add(bg);
 
-        // ── Panel ──
+
         JPanel panel = new JPanel(null);
         panel.setBackground(new Color(255, 184, 50));
         panel.setBorder(new LineBorder(Color.BLACK, 3));
         panel.setBounds(30, 20, 340, 420);
         bg.add(panel);
 
-        // ── Título ──
+
         JLabel titulo = new JLabel("SELECCIONA OPONENTE", SwingConstants.CENTER);
         titulo.setBounds(0, 20, 340, 35);
         titulo.setFont(new Font("Calisto MT", Font.BOLD, 20));
@@ -56,7 +56,7 @@ public class SeleccionOponente extends JFrame {
         sub.setForeground(new Color(100, 0, 0));
         panel.add(sub);
 
-        // ── Lista de jugadores ──
+     
         ArrayList<Usuario> activos = sistema.getUsuariosActivos();
         activos.removeIf(u -> u.getUsername().equals(jugador1.getUsername()));
 
@@ -69,7 +69,7 @@ public class SeleccionOponente extends JFrame {
             sinJugadores.setForeground(new Color(153, 0, 0));
             panel.add(sinJugadores);
 
-            // Botón VOLVER únicamente
+  
             JButton btnVolver = crearBoton("VOLVER", new Color(153, 0, 0));
             btnVolver.setBounds(90, 350, 160, 40);
             btnVolver.addActionListener(e -> {
@@ -101,7 +101,7 @@ public class SeleccionOponente extends JFrame {
             scroll.setBorder(new LineBorder(Color.BLACK, 2));
             panel.add(scroll);
 
-            // ── Botón JUGAR ──
+
             JButton btnJugar = crearBoton("¡JUGAR!", new Color(0, 120, 0));
             btnJugar.setBounds(90, 315, 160, 45);
             btnJugar.addActionListener(e -> {
@@ -116,7 +116,7 @@ public class SeleccionOponente extends JFrame {
             });
             panel.add(btnJugar);
 
-            // ── Botón VOLVER ──
+
             JButton btnVolver = crearBoton("VOLVER", new Color(153, 0, 0));
             btnVolver.setBounds(90, 368, 160, 38);
             btnVolver.addActionListener(e -> {

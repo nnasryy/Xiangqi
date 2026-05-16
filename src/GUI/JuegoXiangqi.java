@@ -29,23 +29,22 @@ public class JuegoXiangqi extends juego.Juego {
         frame.setResizable(false);
         frame.setLayout(new BorderLayout());
 
-        // ── Norte: título + turno ──
+       
         frame.add(crearPanelNorte(),    BorderLayout.NORTH);
 
-        // ── Centro: tablero con margen marrón ──
         JPanel wrapTablero = new JPanel(new GridBagLayout());
         wrapTablero.setBackground(new Color(139, 90, 43));
         tablero = new Tablero();
         wrapTablero.add(tablero);
         frame.add(wrapTablero, BorderLayout.CENTER);
 
-        // ── Izquierda: jugador 1 (rojo) ──
+ 
         frame.add(crearPanelJugador(getJugador1(), "rojo", true),  BorderLayout.WEST);
 
-        // ── Derecha: jugador 2 (negro) ──
+
         frame.add(crearPanelJugador(getJugador2(), "negro", false), BorderLayout.EAST);
 
-        // ── Sur: botón retirar ──
+
         frame.add(crearPanelSur(), BorderLayout.SOUTH);
 
         tablero.setOnTurnoChange(() -> actualizarTurno());
@@ -57,9 +56,7 @@ public class JuegoXiangqi extends juego.Juego {
         frame.setVisible(true);
     }
 
-    // ================================================================
-    //  PANEL NORTE — título + turno centrados
-    // ================================================================
+
     private JPanel crearPanelNorte() {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setPreferredSize(new Dimension(800, 90));
@@ -95,9 +92,6 @@ public class JuegoXiangqi extends juego.Juego {
         return panel;
     }
 
-    // ================================================================
-    //  PANEL SUR — botón retirar
-    // ================================================================
     private JPanel crearPanelSur() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 10));
         panel.setBackground(new Color(60, 30, 5));
@@ -116,9 +110,6 @@ public class JuegoXiangqi extends juego.Juego {
         return panel;
     }
 
-    // ================================================================
-    //  PANEL JUGADOR (izquierda o derecha)
-    // ================================================================
     private JPanel crearPanelJugador(Usuario jugador, String color, boolean esRojo) {
         JPanel panel = new JPanel(null);
         panel.setPreferredSize(new Dimension(170, 600));
@@ -128,7 +119,7 @@ public class JuegoXiangqi extends juego.Juego {
             ? new Color(220, 80, 80)
             : new Color(180, 180, 180);
 
-        // ── Etiqueta color ──
+
         JLabel lblColor = new JLabel(esRojo ? "JUGADOR ROJO" : "JUGADOR NEGRO",
                                      SwingConstants.CENTER);
         lblColor.setBounds(0, 20, 170, 22);
@@ -136,27 +127,27 @@ public class JuegoXiangqi extends juego.Juego {
         lblColor.setForeground(colorTexto);
         panel.add(lblColor);
 
-        // ── Username ──
+
         JLabel lblNombre = new JLabel(jugador.getUsername(), SwingConstants.CENTER);
         lblNombre.setBounds(0, 44, 170, 32);
         lblNombre.setFont(new Font("Century", Font.BOLD, 18));
         lblNombre.setForeground(colorTexto);
         panel.add(lblNombre);
 
-        // ── Separador ──
+
         JSeparator sep = new JSeparator();
         sep.setBounds(10, 82, 150, 3);
         sep.setForeground(new Color(255, 210, 80));
         panel.add(sep);
 
-        // ── Label capturas ──
+
         JLabel lblCap = new JLabel("CAPTURADAS", SwingConstants.CENTER);
         lblCap.setBounds(0, 90, 170, 20);
         lblCap.setFont(new Font("Century", Font.BOLD, 11));
         lblCap.setForeground(new Color(200, 170, 80));
         panel.add(lblCap);
 
-        // ── Panel de iconos capturados ──
+
         JPanel panelCapturas = new JPanel(new WrapLayout(FlowLayout.CENTER, 3, 3));
         panelCapturas.setBounds(5, 112, 160, 420);
         panelCapturas.setBackground(new Color(80, 45, 10));
@@ -171,9 +162,7 @@ public class JuegoXiangqi extends juego.Juego {
         return panel;
     }
 
-    // ================================================================
-    //  REGISTRAR CAPTURA
-    // ================================================================
+
     private void registrarCaptura(Pieza pieza, String colorGanador) {
         String key  = pieza.getColor() + "_" + keyNombre(pieza);
         ImageIcon icon = cargarIcono(key, 44);
@@ -212,9 +201,6 @@ public class JuegoXiangqi extends juego.Juego {
         }
     }
 
-    // ================================================================
-    //  ACTUALIZAR TURNO
-    // ================================================================
     private void actualizarTurno() {
         if (tablero.getTurno().equals("rojo")) {
             lblTurno.setText(getJugador1().getUsername());
@@ -225,9 +211,6 @@ public class JuegoXiangqi extends juego.Juego {
         }
     }
 
-    // ================================================================
-    //  CONFIRMAR RETIRO
-    // ================================================================
     private void confirmarRetiro() {
         String quienRetira = tablero.getTurno().equals("rojo")
             ? getJugador1().getUsername()
@@ -239,9 +222,6 @@ public class JuegoXiangqi extends juego.Juego {
         if (ok) tablero.retirar();
     }
 
-    // ================================================================
-    //  PROCESAR FIN DE JUEGO
-    // ================================================================
     private void procesarFin(String info) {
         String  ganadorColor;
         boolean porRetiro;
@@ -276,9 +256,6 @@ public class JuegoXiangqi extends juego.Juego {
             ganadorColor.equals("rojo") ? getJugador1() : getJugador2());
     }
 
-    // ================================================================
-    //  WRAPLAYOUT — permite que los iconos hagan wrap automático
-    // ================================================================
     static class WrapLayout extends FlowLayout {
         public WrapLayout(int align, int hgap, int vgap) {
             super(align, hgap, vgap);

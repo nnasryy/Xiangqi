@@ -37,7 +37,7 @@ public class MiCuenta {
         panel.setBounds(60, 15, 480, 465);
         bg.add(panel);
 
-        // ── Título ──
+ 
         JLabel titulo = new JLabel("MI CUENTA", SwingConstants.CENTER);
         titulo.setBounds(0, 15, 480, 45);
         titulo.setFont(new Font("Calisto MT", Font.BOLD, 36));
@@ -49,7 +49,7 @@ public class MiCuenta {
         sep.setForeground(Color.BLACK);
         panel.add(sep);
 
-        // ── Info ──
+ 
         int y = 72;
         panel.add(crearFila("USERNAME:",      actual.getUsername(),                      y)); y += 44;
         panel.add(crearFila("PUNTOS:",        String.valueOf(actual.getPuntos()),         y)); y += 44;
@@ -61,7 +61,7 @@ public class MiCuenta {
         sep2.setForeground(Color.BLACK);
         panel.add(sep2);
 
-        // ── Botones — todos del mismo ancho y alto reducido ──
+  
         int bx = 70, bw = 340, bh = 38, by = 265, gap = 46;
 
         JButton btnCambiarPass = new JButton("CAMBIAR PASSWORD");
@@ -128,9 +128,6 @@ public class MiCuenta {
         return fila;
     }
 
-    // ================================================================
-    //  CAMBIAR PASSWORD
-    // ================================================================
     private void cambiarPassword() {
         String actualPass = Warning.pedirPassword(frame, "Ingresa tu password actual:");
         if (actualPass == null) return;
@@ -156,9 +153,6 @@ public class MiCuenta {
         }
     }
 
-    // ================================================================
-    //  DESACTIVAR / ACTIVAR
-    // ================================================================
     private void toggleActivacion(JButton btn) {
         if (actual.isActivo()) {
             boolean seguro = Warning.confirmar(frame,
@@ -188,9 +182,6 @@ public class MiCuenta {
         }
     }
 
-    // ================================================================
-    //  ELIMINAR CUENTA
-    // ================================================================
     private void eliminarCuenta() {
         boolean seguro = Warning.confirmar(frame,
             "¿Seguro que deseas eliminar tu cuenta?\nEsta acción no se puede deshacer.");

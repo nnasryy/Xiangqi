@@ -36,22 +36,22 @@ public class Usuario {
         this.logIndex     = 0;
     }
 
-    // ===== GETTERS =====
+    
     public String    getUsername()     { return username;     }
     public String    getPassword()     { return password;     }
     public int       getPuntos()       { return puntos;       }
     public LocalDate getFechaIngreso() { return fechaIngreso; }
     public boolean   isActivo()        { return activo;       }
 
-    // ===== SETTERS =====
+   
     public void setPassword(String password) { this.password = password; }
     public void desactivar()                 { this.activo   = false;    }
     public void activar()                    { this.activo   = true;     }
 
-    // ===== PUNTOS =====
+  
     public void agregarPuntos(int pts) { puntos += pts; }
 
-    // ===== LOGS =====
+  
     public void registrarLogPartida(String log) {
         logsPartidas[logIndex] = log;
         logIndex = (logIndex + 1) % 10;
