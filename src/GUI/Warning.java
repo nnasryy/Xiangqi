@@ -114,7 +114,7 @@ public class Warning extends JDialog {
         hint.setVisible(mensaje.toLowerCase().contains("nuevo"));
         bg.add(hint);
 
-        // Botones más pequeños para que quepan mejor
+
         JButton btnConfirmar = crearBotonPequeno("CONFIRMAR", new Color(0, 120, 0));
         btnConfirmar.setBounds(95, 205, 160, 38);
         btnConfirmar.addActionListener(e -> {
