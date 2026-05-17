@@ -32,7 +32,7 @@ public class Tablero extends JPanel {
 
     public Tablero() {
         int ancho = MARGEN + CELDA * COLS + 10;
-        int alto  = MARGEN + CELDA * FILAS + 25; // 25 extra abajo para letras
+        int alto  = MARGEN + CELDA * FILAS + 25; 
         setPreferredSize(new Dimension(ancho, alto));
         setBackground(new Color(139, 90, 43));
 
