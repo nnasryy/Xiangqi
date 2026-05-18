@@ -280,7 +280,7 @@ public class Tablero extends JPanel {
     }
 
     private void dibujarRio(Graphics2D g2) {
-        int y  = MARGEN + 5 * CELDA;  // línea encima de fila 5
+        int y  = MARGEN + 5 * CELDA;
         int x1 = MARGEN;
         int x2 = MARGEN + COLS * CELDA;
 
